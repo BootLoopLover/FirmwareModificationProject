@@ -124,7 +124,6 @@ if [[ "$preset_choice" == "3" || "$preset_choice" == "4" ]]; then
     cp -r ../preset-nss/* files/ 2>/dev/null
     cp ../preset-nss/config-nss .config
     echo -e "${BLUE}config-nss has been copied to .config${NC}"
-    skip_menuconfig=true
 fi
 
 # === Update Feeds ===
@@ -149,12 +148,6 @@ echo -e "${BLUE}Available tags:${NC}"
 git tag | sort -V
 read -p "Enter branch/tag to checkout: " TARGET_TAG
 git checkout $TARGET_TAG
-
-# === Config Khusus IPQ ===
-if [[ "$choice" == "2" ]]; then
-    echo -e "${BLUE}Applying preseeded .config for OpenWrt-IPQ...${NC}"
-    cp nss-setup/config-nss.seed .config
-fi
 
 # === Buka Menuconfig Jika Tidak Skip ===
 if [ "$skip_menuconfig" = false ]; then
