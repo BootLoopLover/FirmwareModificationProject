@@ -78,6 +78,7 @@ cd $distro
 
 # === Pilihan Folder Preset ===
 echo -e "${BLUE}Select which preset to use:${NC}"
+echo "Nota: Autobuild Script Preset For Compiler Only...Please Choose None"
 echo "0) None"
 echo "1) preset-openwrt"
 echo "2) preset-immortalwrt"
