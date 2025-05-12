@@ -100,6 +100,12 @@ branch_name="build-$(date +%Y%m%d-%H%M)"
 echo -e "${BLUE}Creating and switching to Git branch: ${branch_name}${NC}"
 git switch -c "$branch_name"
 
+# === Tambahkan Feeds Tambahan ===
+echo >> feeds.conf.default
+echo 'src-git qmodem https://github.com/BootLoopLover/qmodem.git' >> feeds.conf.default
+echo 'src-git pakalolopackage https://github.com/BootLoopLover/pakalolo-package.git' >> feeds.conf.default
+read -p "Press [Enter] to continue after modifying feeds if needed..." temp
+
 # === Pilihan Folder Preset ===
 echo -e "${BLUE}Select which preset to use:${NC}"
 echo "Nota: Autobuild Script Preset For Compiler Only...Please Choose None"
