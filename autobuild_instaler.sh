@@ -20,7 +20,7 @@ script_file="$(basename "$0")"
 
 # === Tampilan Awal ===
 clear
-echo -e "${BLUE}UNIVERSAL-WRT${NC}"
+echo -e "${BLUE}Firmware Modifications Project Create By Pakalolo${NC}"
 echo -e "${BLUE}Select the firmware distribution you want to build:${NC}"
 echo "1) OpenWrt"
 echo "2) OpenWrt-ipq"
@@ -76,15 +76,45 @@ git clone $repo $distro
 # === Masuk ke Folder Source ===
 cd $distro
 
+# === Update Feeds ===
+echo -e "${BLUE}Initializing and installing feeds...${NC}"
+./scripts/feeds update -a
+./scripts/feeds install -a
+
+# === Tampilkan Tag dan Checkout ===
+echo -e "${BLUE}Available tags (recommended base versions):${NC}"
+git tag | sort -V
+read -p "Enter tag to base your build on (leave empty to use default branch): " TARGET_TAG
+
+if [[ -n "$TARGET_TAG" ]]; then
+    git fetch --tags
+    git checkout "$TARGET_TAG"
+fi
+
+# === Tampilkan Branch ===
+echo -e "${BLUE}Available branches:${NC}"
+git branch -a
+
+# === Checkout ke Branch Tertentu ===
+branch_name="build-$(date +%Y%m%d-%H%M)"
+echo -e "${BLUE}Creating and switching to Git branch: ${branch_name}${NC}"
+git switch -c "$branch_name"
+
+# === Tambahkan Feeds Tambahan ===
+echo >> feeds.conf.default
+echo 'src-git qmodem https://github.com/BootLoopLover/qmodem.git' >> feeds.conf.default
+echo 'src-git pakalolopackage https://github.com/BootLoopLover/pakalolo-package.git' >> feeds.conf.default
+read -p "Press [Enter] to continue after modifying feeds if needed..." temp
+
 # === Pilihan Folder Preset ===
 echo -e "${BLUE}Select which preset to use:${NC}"
-echo "Nota: Autobuild Script Preset For Compiler Only...Please Choose None"
-echo "0) None"
-echo "1) preset-openwrt"
-echo "2) preset-immortalwrt"
-echo "3) preset-nss"
-echo "4) All"
-read -p "Enter your choice [0/1/2/3/4]: " preset_choice
+echo "Note : Autobuild Script Preset For Compiler Only...Please Choose None"
+echo "1) None"
+echo "2) preset-openwrt"
+echo "3) preset-immortalwrt"
+echo "4) preset-nss"
+echo "5) All"
+read -p "Enter your choice [1/2/3/4/5]: " preset_choice
 
 # === Clone dan Gabungkan Preset Sesuai Pilihan ===
 skip_menuconfig=false
@@ -141,32 +171,10 @@ if [[ "$preset_choice" == "3" || "$preset_choice" == "4" ]]; then
     fi
 fi
 
-# === Update Feeds ===
-echo -e "${BLUE}Initializing and installing feeds...${NC}"
-./scripts/feeds update -a
-./scripts/feeds install -a
-
-# === Tambahkan Feeds Tambahan ===
-echo >> feeds.conf.default
-echo 'src-git qmodem https://github.com/BootLoopLover/qmodem.git' >> feeds.conf.default
-echo 'src-git pakalolopackage https://github.com/BootLoopLover/pakalolo-package.git' >> feeds.conf.default
-read -p "Press [Enter] to continue after modifying feeds if needed..." temp
-
 # === Update Feeds Ulang ===
+echo -e "${BLUE}Updating feeds again...${NC}"
 ./scripts/feeds update -a
 ./scripts/feeds install -a
-
-# === Tampilkan Branch dan Tag ===
-echo -e "${BLUE}Available branches:${NC}"
-git branch -a
-echo -e "${BLUE}Available tags:${NC}"
-git tag | sort -V
-read -p "Enter branch/tag to checkout: " TARGET_TAG
-
-# Nonaktifkan warning detached HEAD
-git config --global advice.detachedHead false
-
-git checkout $TARGET_TAG
 
 # === Buka Menuconfig Jika Tidak Skip ===
 if [ "$skip_menuconfig" = false ]; then
