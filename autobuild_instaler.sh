@@ -78,11 +78,12 @@ cd $distro
 
 # === Pilihan Folder Preset ===
 echo -e "${BLUE}Select which preset to use:${NC}"
+echo "0) None"
 echo "1) preset-openwrt"
 echo "2) preset-immortalwrt"
 echo "3) preset-nss"
 echo "4) All"
-read -p "Enter your choice [1/2/3/4]: " preset_choice
+read -p "Enter your choice [0/1/2/3/4]: " preset_choice
 
 # === Clone dan Gabungkan Preset Sesuai Pilihan ===
 skip_menuconfig=false
@@ -160,6 +161,10 @@ git branch -a
 echo -e "${BLUE}Available tags:${NC}"
 git tag | sort -V
 read -p "Enter branch/tag to checkout: " TARGET_TAG
+
+# Nonaktifkan warning detached HEAD
+git config --global advice.detachedHead false
+
 git checkout $TARGET_TAG
 
 # === Buka Menuconfig Jika Tidak Skip ===
