@@ -86,6 +86,7 @@ read -p "Enter your choice [1/2/3/4]: " preset_choice
 
 # === Clone dan Gabungkan Preset Sesuai Pilihan ===
 mkdir -p files
+skip_menuconfig=false
 
 if [[ "$preset_choice" == "1" || "$preset_choice" == "4" ]]; then
     if [ ! -d ../preset-openwrt ]; then
@@ -121,6 +122,9 @@ if [[ "$preset_choice" == "3" || "$preset_choice" == "4" ]]; then
         echo -e "${GREEN}preset-nss already exists. Skipping clone.${NC}"
     fi
     cp -r ../preset-nss/* files/ 2>/dev/null
+    cp ../preset-nss/config-nss .config
+    echo -e "${BLUE}config-nss has been copied to .config${NC}"
+    skip_menuconfig=true
 fi
 
 # === Update Feeds ===
@@ -152,9 +156,13 @@ if [[ "$choice" == "2" ]]; then
     cp nss-setup/config-nss.seed .config
 fi
 
-# === Buka Menuconfig ===
-echo -e "${BLUE}Launching configuration menu...${NC}"
-make menuconfig
+# === Buka Menuconfig Jika Tidak Skip ===
+if [ "$skip_menuconfig" = false ]; then
+    echo -e "${BLUE}Launching configuration menu...${NC}"
+    make menuconfig
+else
+    echo -e "${BLUE}Skipping menuconfig as .config has been preseeded.${NC}"
+fi
 
 # === Mulai Build ===
 echo -e "${BLUE}Starting build process...${NC}"
