@@ -109,12 +109,12 @@ read -p "Press [Enter] to continue after modifying feeds if needed..." temp
 # === Pilihan Folder Preset ===
 echo -e "${BLUE}Select which preset to use:${NC}"
 echo "Note : Autobuild Script Preset For Compiler Only...Please Choose None"
-echo "1) None"
-echo "2) preset-openwrt"
-echo "3) preset-immortalwrt"
-echo "4) preset-nss"
-echo "5) All"
-read -p "Enter your choice [1/2/3/4/5]: " preset_choice
+echo "0) None"
+echo "1) preset-openwrt"
+echo "2) preset-immortalwrt"
+echo "3) preset-nss"
+echo "4) All"
+read -p "Enter your choice [0/1/2/3/4]: " preset_choice
 
 # === Clone dan Gabungkan Preset Sesuai Pilihan ===
 skip_menuconfig=false
