@@ -85,7 +85,6 @@ echo "4) All"
 read -p "Enter your choice [1/2/3/4]: " preset_choice
 
 # === Clone dan Gabungkan Preset Sesuai Pilihan ===
-mkdir -p files
 skip_menuconfig=false
 
 if [[ "$preset_choice" == "1" || "$preset_choice" == "4" ]]; then
