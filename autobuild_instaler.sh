@@ -96,7 +96,10 @@ if [[ "$preset_choice" == "1" || "$preset_choice" == "4" ]]; then
     else
         echo -e "${GREEN}preset-openwrt already exists. Skipping clone.${NC}"
     fi
-    cp -r ../preset-openwrt/* files/ 2>/dev/null
+    if [ -d ../preset-openwrt/files ]; then
+        mkdir -p files
+        cp -r ../preset-openwrt/files/* files/
+    fi
 fi
 
 if [[ "$preset_choice" == "2" || "$preset_choice" == "4" ]]; then
@@ -108,7 +111,10 @@ if [[ "$preset_choice" == "2" || "$preset_choice" == "4" ]]; then
     else
         echo -e "${GREEN}preset-immortalwrt already exists. Skipping clone.${NC}"
     fi
-    cp -r ../preset-immortalwrt/* files/ 2>/dev/null
+    if [ -d ../preset-immortalwrt/files ]; then
+        mkdir -p files
+        cp -r ../preset-immortalwrt/files/* files/
+    fi
 fi
 
 if [[ "$preset_choice" == "3" || "$preset_choice" == "4" ]]; then
@@ -120,9 +126,17 @@ if [[ "$preset_choice" == "3" || "$preset_choice" == "4" ]]; then
     else
         echo -e "${GREEN}preset-nss already exists. Skipping clone.${NC}"
     fi
-    cp -r ../preset-nss/* files/ 2>/dev/null
-    cp ../preset-nss/config-nss .config
-    echo -e "${BLUE}config-nss has been copied to .config${NC}"
+    if [ -d ../preset-nss/files ]; then
+        mkdir -p files
+        cp -r ../preset-nss/files/* files/
+    fi
+    if [ -f ../preset-nss/config-nss ]; then
+        cp ../preset-nss/config-nss .config
+        echo -e "${BLUE}config-nss has been copied to .config${NC}"
+        skip_menuconfig=true
+    else
+        echo -e "${RED}config-nss not found in preset-nss. Skipping .config copy.${NC}"
+    fi
 fi
 
 # === Update Feeds ===
