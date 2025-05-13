@@ -64,39 +64,39 @@ if [[ "$1" == "--clean" ]]; then
     exit 0
 fi
 
-# === Install Dependency ===
-echo -e "${BLUE}Installing required build dependencies...${NC}"
-sudo apt update -y
-sudo apt install -y $deps
+# === Tanyakan apakah ingin install dependencies ===
+read -p "Do you want to update and install build dependencies? (y/n): " update_deps
+update_deps=${update_deps,,}  # Lowercase input
+
+if [[ "$update_deps" == "y" || "$update_deps" == "yes" ]]; then
+    echo -e "${BLUE}Installing required build dependencies...${NC}"
+    sudo apt update -y
+    sudo apt install -y $deps
+else
+    echo -e "${GREEN}Skipping dependency installation as requested.${NC}"
+fi
 
 # === Clone Source Repo ===
 [ -d "$distro" ] && echo -e "${BLUE}Removing existing '${distro}'...${NC}" && rm -rf "$distro"
 echo -e "${BLUE}Cloning repository from GitHub...${NC}"
-git clone $repo $distro
+git clone "$repo" "$distro"
 
-# === Masuk ke Folder Source ===
-cd $distro
+cd "$distro"
 
 # === Update Feeds ===
 echo -e "${BLUE}Initializing and installing feeds...${NC}"
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 
-# === Tampilkan Tag dan Checkout ===
+# === Tag dan Branch ===
 echo -e "${BLUE}Available tags (recommended base versions):${NC}"
 git tag | sort -V
 read -p "Enter tag to base your build on (leave empty to use default branch): " TARGET_TAG
-
 if [[ -n "$TARGET_TAG" ]]; then
     git fetch --tags
     git checkout "$TARGET_TAG"
 fi
 
-# === Tampilkan Branch ===
-echo -e "${BLUE}Available branches:${NC}"
-git branch -a
-
-# === Checkout ke Branch Tertentu ===
 branch_name="build-$(date +%Y%m%d-%H%M)"
 echo -e "${BLUE}Creating and switching to Git branch: ${branch_name}${NC}"
 git switch -c "$branch_name"
@@ -108,38 +108,31 @@ echo "  2) add qmodem feeds"
 echo "  3) add pakalolopackage feeds"
 echo "  4) add php7 feeds"
 echo "  5) add all feeds"
-read -p "Enter your choice [1/2/3]/4/5: " choice
+read -p "Enter your choice [1/2/3/4/5]: " choice
 
-# === Proses pilihan pengguna ===
-case "$pilihan" in
+case "$choice" in
     1)
         echo "Tidak ada feed yang ditambahkan."
         ;;
     2)
         echo 'src-git qmodem https://github.com/BootLoopLover/qmodem.git' >> feeds.conf.default
-        echo "Feed 'qmodem' telah ditambahkan."
         ;;
     3)
         echo 'src-git pakalolopackage https://github.com/BootLoopLover/pakalolo-package.git' >> feeds.conf.default
-        echo "Feed 'pakalolopackage' telah ditambahkan."
         ;;
     4)
         echo 'src-git php7 https://github.com/BootLoopLover/openwrt-php7-package.git' >> feeds.conf.default
-        echo "Feed 'php7 package' telah ditambahkan."
         ;;
     5)
         echo 'src-git qmodem https://github.com/BootLoopLover/qmodem.git' >> feeds.conf.default
         echo 'src-git pakalolopackage https://github.com/BootLoopLover/pakalolo-package.git' >> feeds.conf.default
         echo 'src-git php7 https://github.com/BootLoopLover/openwrt-php7-package.git' >> feeds.conf.default
-        echo "Semua feeds telah ditambahkan."
         ;;
-
     *)
         echo "Pilihan tidak valid. Tidak ada feed yang ditambahkan."
         ;;
 esac
 
-# Tunggu konfirmasi sebelum melanjutkan
 read -p "Tekan [Enter] untuk melanjutkan setelah mengubah feeds jika perlu..." temp
 
 # === Pilihan Folder Preset ===
@@ -152,67 +145,35 @@ echo "4) preset-nss"
 echo "5) All"
 read -p "Enter your choice [1/2/3/4/5]: " preset_choice
 
-# === Clone dan Gabungkan Preset Sesuai Pilihan ===
 skip_menuconfig=false
 
-if [[ "$preset_choice" == "2" || "$preset_choice" == "5" ]]; then
-    if [ ! -d ../preset-openwrt ]; then
-        echo -e "${BLUE}Cloning preset-openwrt from GitHub...${NC}"
-        git clone https://github.com/BootLoopLover/preset-openwrt.git ../preset-openwrt || {
-            echo -e "${RED}Failed to clone preset-openwrt.${NC}"; exit 1;
-        }
-    else
-        echo -e "${GREEN}preset-openwrt already exists. Skipping clone.${NC}"
-    fi
-    if [ -d ../preset-openwrt/files ]; then
+function clone_and_copy_preset() {
+    local repo_url=$1
+    local folder_name=$2
+    echo -e "${BLUE}Cloning ${folder_name} from GitHub...${NC}"
+    git clone "$repo_url" "../$folder_name" || {
+        echo -e "${RED}Failed to clone ${folder_name}.${NC}"; return
+    }
+    if [ -d "../$folder_name/files" ]; then
         mkdir -p files
-        cp -r ../preset-openwrt/files/* files/
+        cp -r "../$folder_name/files/"* files/
     fi
-fi
-
-if [[ "$preset_choice" == "3" || "$preset_choice" == "5" ]]; then
-    if [ ! -d ../preset-immortalwrt ]; then
-        echo -e "${BLUE}Cloning preset-immortalwrt from GitHub...${NC}"
-        git clone https://github.com/BootLoopLover/preset-immortalwrt.git ../preset-immortalwrt || {
-            echo -e "${RED}Failed to clone preset-immortalwrt.${NC}"; exit 1;
-        }
-    else
-        echo -e "${GREEN}preset-immortalwrt already exists. Skipping clone.${NC}"
-    fi
-    if [ -d ../preset-immortalwrt/files ]; then
-        mkdir -p files
-        cp -r ../preset-immortalwrt/files/* files/
-    fi
-fi
-
-if [[ "$preset_choice" == "4" || "$preset_choice" == "5" ]]; then
-    if [ ! -d ../preset-nss ]; then
-        echo -e "${BLUE}Cloning preset-nss from GitHub...${NC}"
-        git clone https://github.com/BootLoopLover/preset-nss.git ../preset-nss || {
-            echo -e "${RED}Failed to clone preset-nss.${NC}"; exit 1;
-        }
-    else
-        echo -e "${GREEN}preset-nss already exists. Skipping clone.${NC}"
-    fi
-    if [ -d ../preset-nss/files ]; then
-        mkdir -p files
-        cp -r ../preset-nss/files/* files/
-    fi
-    if [ -f ../preset-nss/config-nss ]; then
-        cp ../preset-nss/config-nss .config
-        echo -e "${BLUE}config-nss has been copied to .config${NC}"
+    if [ -f "../$folder_name/config-nss" ]; then
+        cp "../$folder_name/config-nss" .config
         skip_menuconfig=true
-    else
-        echo -e "${RED}config-nss not found in preset-nss. Skipping .config copy.${NC}"
     fi
-fi
+}
+
+[[ "$preset_choice" == "2" || "$preset_choice" == "5" ]] && clone_and_copy_preset "https://github.com/BootLoopLover/preset-openwrt.git" "preset-openwrt"
+[[ "$preset_choice" == "3" || "$preset_choice" == "5" ]] && clone_and_copy_preset "https://github.com/BootLoopLover/preset-immortalwrt.git" "preset-immortalwrt"
+[[ "$preset_choice" == "4" || "$preset_choice" == "5" ]] && clone_and_copy_preset "https://github.com/BootLoopLover/preset-nss.git" "preset-nss"
 
 # === Update Feeds Ulang ===
 echo -e "${BLUE}Updating feeds again...${NC}"
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 
-# === Buka Menuconfig Jika Tidak Skip ===
+# === Menuconfig ===
 if [ "$skip_menuconfig" = false ]; then
     echo -e "${BLUE}Launching configuration menu...${NC}"
     make menuconfig
