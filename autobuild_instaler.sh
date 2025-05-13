@@ -20,7 +20,8 @@ script_file="$(basename "$0")"
 
 # === Tampilan Awal ===
 clear
-echo -e "${BLUE}Firmware Modifications Project Create By Pakalolo${NC}"
+echo -e "${BLUE}Firmware Modifications Project${NC}"
+echo -e "${BLUE}Create By Pakalolo${NC}"
 echo -e "${BLUE}Select the firmware distribution you want to build:${NC}"
 echo "1) OpenWrt"
 echo "2) OpenWrt-ipq"
