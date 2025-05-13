@@ -100,11 +100,46 @@ branch_name="build-$(date +%Y%m%d-%H%M)"
 echo -e "${BLUE}Creating and switching to Git branch: ${branch_name}${NC}"
 git switch -c "$branch_name"
 
-# === Tambahkan Feeds Tambahan ===
-echo >> feeds.conf.default
-echo 'src-git qmodem https://github.com/BootLoopLover/qmodem.git' >> feeds.conf.default
-echo 'src-git pakalolopackage https://github.com/BootLoopLover/pakalolo-package.git' >> feeds.conf.default
-read -p "Press [Enter] to continue after modifying feeds if needed..." temp
+# === Pilihan Feeds Tambahan ===
+echo "Pilih opsi feeds yang ingin ditambahkan:"
+echo "  1) no feeds"
+echo "  2) add qmodem feeds"
+echo "  3) add pakalolopackage feeds"
+echo "  4) add php7 feeds"
+echo "  5) add all feeds"
+read -p "Masukkan pilihan Anda (1-4): " pilihan
+
+# === Proses pilihan pengguna ===
+case "$pilihan" in
+    1)
+        echo "Tidak ada feed yang ditambahkan."
+        ;;
+    2)
+        echo 'src-git qmodem https://github.com/BootLoopLover/qmodem.git' >> feeds.conf.default
+        echo "Feed 'qmodem' telah ditambahkan."
+        ;;
+    3)
+        echo 'src-git pakalolopackage https://github.com/BootLoopLover/pakalolo-package.git' >> feeds.conf.default
+        echo "Feed 'pakalolopackage' telah ditambahkan."
+        ;;
+    4)
+        echo 'src-git php7 https://github.com/BootLoopLover/openwrt-php7-package.git' >> feeds.conf.default
+        echo "Feed 'php7 package' telah ditambahkan."
+        ;;
+    5)
+        echo 'src-git qmodem https://github.com/BootLoopLover/qmodem.git' >> feeds.conf.default
+        echo 'src-git pakalolopackage https://github.com/BootLoopLover/pakalolo-package.git' >> feeds.conf.default
+        echo 'src-git php7 https://github.com/BootLoopLover/openwrt-php7-package.git' >> feeds.conf.default
+        echo "Semua feeds telah ditambahkan."
+        ;;
+
+    *)
+        echo "Pilihan tidak valid. Tidak ada feed yang ditambahkan."
+        ;;
+esac
+
+# Tunggu konfirmasi sebelum melanjutkan
+read -p "Tekan [Enter] untuk melanjutkan setelah mengubah feeds jika perlu..." temp
 
 # === Pilihan Folder Preset ===
 echo -e "${BLUE}Select which preset to use:${NC}"
