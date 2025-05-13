@@ -107,7 +107,7 @@ echo "  2) add qmodem feeds"
 echo "  3) add pakalolopackage feeds"
 echo "  4) add php7 feeds"
 echo "  5) add all feeds"
-read -p "Masukkan pilihan Anda (1-4): " pilihan
+read -p "Enter your choice [1/2/3]/4/5: " choice
 
 # === Proses pilihan pengguna ===
 case "$pilihan" in
