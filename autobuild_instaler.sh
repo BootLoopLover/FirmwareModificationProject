@@ -1,4 +1,15 @@
 #!/bin/bash
+#--------------------------------------------------------
+#   Don't remove this section for credits
+#   Don't rename this file
+#--------------------------------------------------------
+#   Firmware Modification Project
+#--------------------------------------------------------
+#   Script by Pakalolo Waraso 
+#   Speacial Thanks to Awiks Telegram Group
+#   github https://github.com/BootLoopLover
+#--------------------------------------------------------
+
 
 # === Warna Terminal ===
 BLUE='\033[1;34m'
