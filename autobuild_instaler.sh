@@ -31,12 +31,15 @@ script_file="$(basename "$0")"
 
 # === Tampilan Awal ===
 clear
-echo -e "${BLUE}Firmware Modifications Project${NC}"
-echo -e "${BLUE}Create By Pakalolo${NC}"
-echo -e "${BLUE}Select the firmware distribution you want to build:${NC}"
+echo "--------------------------------------------------------"
+echo -e "\033[1;34mFirmware Modifications Project\033[0m"
+echo -e "\033[1;34mCreated by Pakalolo\033[0m"
+echo -e "\033[1;34mSelect the firmware distribution you want to build:\033[0m"
+echo "--------------------------------------------------------"
 echo "1) OpenWrt"
 echo "2) OpenWrt-ipq"
 echo "3) ImmortalWrt"
+echo "--------------------------------------------------------"
 read -p "Enter your choice [1/2/3]: " choice
 
 # === Pilihan Distro ===
@@ -113,12 +116,15 @@ echo -e "${BLUE}Creating and switching to Git branch: ${branch_name}${NC}"
 git switch -c "$branch_name"
 
 # === Pilihan Feeds Tambahan ===
+echo "--------------------------------------------------------"
 echo "Pilih opsi feeds yang ingin ditambahkan:"
+echo "--------------------------------------------------------"
 echo "  1) no feeds"
 echo "  2) add qmodem feeds"
 echo "  3) add pakalolopackage feeds"
 echo "  4) add php7 feeds"
 echo "  5) add all feeds"
+echo "--------------------------------------------------------"
 read -p "Enter your choice [1/2/3/4/5]: " choice
 
 case "$choice" in
@@ -147,13 +153,16 @@ esac
 read -p "Tekan [Enter] untuk melanjutkan setelah mengubah feeds jika perlu..." temp
 
 # === Pilihan Folder Preset ===
+echo "--------------------------------------------------------"
 echo -e "${BLUE}Select which preset to use:${NC}"
 echo "Note : Autobuild Script Preset For Compiler Only...Please Choose None"
+echo "--------------------------------------------------------"
 echo "1) None"
 echo "2) preset-openwrt"
 echo "3) preset-immortalwrt"
 echo "4) preset-nss"
 echo "5) All"
+echo "--------------------------------------------------------"
 read -p "Enter your choice [1/2/3/4/5]: " preset_choice
 
 skip_menuconfig=false
