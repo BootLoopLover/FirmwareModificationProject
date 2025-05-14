@@ -120,28 +120,23 @@ echo "--------------------------------------------------------"
 echo "Pilih opsi feeds yang ingin ditambahkan:"
 echo "--------------------------------------------------------"
 echo "  1) no feeds"
-echo "  2) add qmodem feeds"
-echo "  3) add custom package feeds"
-echo "  4) add php7 feeds"
-echo "  5) add all feeds"
+echo "  2) add custom package feeds"
+echo "  3) add php7 feeds"
+echo "  4) add all feeds"
 echo "--------------------------------------------------------"
-read -p "Enter your choice [1/2/3/4/5]: " choice
+read -p "Enter your choice [1/2/3/4]: " choice
 
 case "$choice" in
     1)
         echo "Tidak ada feed yang ditambahkan."
         ;;
     2)
-        echo 'src-git qmodem https://github.com/BootLoopLover/qmodem.git' >> feeds.conf.default
-        ;;
-    3)
         echo 'src-git pakalolopackage https://github.com/BootLoopLover/custom-package.git' >> feeds.conf.default
         ;;
-    4)
+    3)
         echo 'src-git php7 https://github.com/BootLoopLover/openwrt-php7-package.git' >> feeds.conf.default
         ;;
-    5)
-        echo 'src-git qmodem https://github.com/BootLoopLover/qmodem.git' >> feeds.conf.default
+    4)
         echo 'src-git pakalolopackage https://github.com/BootLoopLover/custom-package.git' >> feeds.conf.default
         echo 'src-git php7 https://github.com/BootLoopLover/openwrt-php7-package.git' >> feeds.conf.default
         ;;
