@@ -1,6 +1,6 @@
 #!/bin/bash
 #--------------------------------------------------------
-# OpenWrt Rebuild Script - Technical Style with Folder Selection & Custom Feeds
+# OpenWrt Rebuild Script - Technical Style with Folder Selection & Custom Feeds Input
 # Author: Pakalolo Waraso
 #--------------------------------------------------------
 
@@ -34,28 +34,22 @@ cd "$build_folder" || { echo -e "${RED}Failed to access folder. Abort.${NC}"; ex
 # --- Menu Pilihan Aksi ---
 while true; do
     echo -e "\n${BLUE}Select action:${NC}"
-    echo "1) Update feeds and run menuconfig"
+    echo "1) Append custom feeds, then update feeds and run menuconfig"
     echo "2) Skip feeds update and menuconfig, proceed to build"
     echo "3) Exit script"
     read -p "Choice [1/2/3]: " choice
 
     case "$choice" in
         1)
+            echo -e "${BLUE}Append custom feed sources to feeds.conf.default (empty line to finish):${NC}"
+            while true; do
+                read -r line
+                [[ -z "$line" ]] && break
+                echo "$line" >> feeds.conf.default
+            done
+            echo -e "${GREEN}Custom feeds appended.${NC}"
+
             echo -e "${BLUE}Updating feeds...${NC}"
-
-            # Tanya apakah mau tambah custom feeds
-            read -p "Do you want to add custom feed sources? (y/n): " add_feed
-            add_feed=${add_feed,,}
-            if [[ "$add_feed" == "y" || "$add_feed" == "yes" ]]; then
-                echo -e "${BLUE}Enter your custom feed lines (empty line to finish):${NC}"
-                while true; do
-                    read -r line
-                    [[ -z "$line" ]] && break
-                    echo "$line" >> feeds.conf.default
-                done
-                echo -e "${GREEN}Custom feeds added to feeds.conf.default.${NC}"
-            fi
-
             ./scripts/feeds update -a
             ./scripts/feeds install -a
 
