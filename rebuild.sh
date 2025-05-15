@@ -21,7 +21,6 @@ echo -e "\033[1;34mTelegram : t.me/PakaloloWaras0\033[0m"
 echo "--------------------------------------------------------"
 
 # --- Pilih Folder Build Berdasarkan Distro ---
-echo "--------------------------------------------------------"
 echo -e "${BLUE}Select build folder to continue:${NC}"
 echo "--------------------------------------------------------"
 echo "1) openwrt"
