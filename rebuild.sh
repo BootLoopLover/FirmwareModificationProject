@@ -12,7 +12,6 @@ NC='\033[0m'
 
 # === Tampilan Awal ===
 clear
-echo "--------------------------------------------------------"
 echo -e "\033[1;34mUniversal Compile Openwrt/Immortalwrt/Openwrt-ipq\033[0m"
 echo "--------------------------------------------------------"
 
@@ -113,7 +112,3 @@ if [[ "$build_confirm" == "1" ]]; then
 else
     echo -e "${GREEN}Build canceled by user.${NC}"
 fi
-
-#Hapus config rebuild
-rm -- "$0"
-
