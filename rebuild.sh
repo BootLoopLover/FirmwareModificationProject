@@ -1,7 +1,6 @@
 #!/bin/bash
 #--------------------------------------------------------
-# OpenWrt Rebuild Script - Technical Style with Folder Selection & Custom Feeds Input
-# Includes auto-reset diverged feeds before update
+# OpenWrt Rebuild Script - Technical Style with Folder Selection
 # Author: Pakalolo Waraso
 #--------------------------------------------------------
 
@@ -11,23 +10,20 @@ YELLOW='\033[1;33m'
 RED='\033[1;31m'
 NC='\033[0m'
 
-reset_diverged_feed() {
-    local feed_dir="$1"
-    if [[ -d "$feed_dir/.git" ]]; then
-        cd "$feed_dir" || return
-        # Check for diverged branches
-        local diverged=$(git rev-list --count --left-right @{upstream}...HEAD 2>/dev/null | grep -E '^[0-9]+' || echo "")
-        if [[ -n "$diverged" ]]; then
-            echo -e "${YELLOW}Detected diverged branch in $feed_dir, resetting to upstream...${NC}"
-            git fetch origin
-            git reset --hard @{upstream}
-        fi
-        cd - >/dev/null || return
-    fi
-}
+# === Tampilan Awal ===
+clear
+echo "--------------------------------------------------------"
+echo -e "\033[1;34mUniversal Compile Openwrt/Immortalwrt/Openwrt-ipq\033[0m"
+echo "--------------------------------------------------------"
+echo -e "\033[1;34mFirmware Modifications Project\033[0m"
+echo -e "\033[1;34mGithub : https://github.com/BootLoopLover\033[0m"
+echo -e "\033[1;34mTelegram : t.me/PakaloloWaras0\033[0m"
+echo "--------------------------------------------------------"
 
 # --- Pilih Folder Build Berdasarkan Distro ---
+echo "--------------------------------------------------------"
 echo -e "${BLUE}Select build folder to continue:${NC}"
+echo "--------------------------------------------------------"
 echo "1) openwrt"
 echo "2) immortalwrt"
 echo "3) openwrt-ipq"
@@ -40,7 +36,6 @@ case "$distro_choice" in
     *) echo -e "${RED}Invalid choice. Exiting.${NC}"; exit 1 ;;
 esac
 
-# --- Validasi Folder Build ---
 if [[ ! -d "$build_folder" ]]; then
     echo -e "${RED}Error: Folder '${build_folder}' not found. Abort.${NC}"
     exit 1
@@ -49,27 +44,19 @@ fi
 cd "$build_folder" || { echo -e "${RED}Failed to access folder. Abort.${NC}"; exit 1; }
 
 # --- Menu Pilihan Aksi ---
+echo "--------------------------------------------------------"
+echo -e "${BLUE}Note : Make sure your feeds are ready before proceeding.${NC}"
+echo "--------------------------------------------------------"
 while true; do
     echo -e "\n${BLUE}Select action:${NC}"
-    echo "1) Append custom feeds, reset diverged feeds, update feeds and run menuconfig"
-    echo "2) Reset diverged feeds, skip feeds update and menuconfig, proceed to build"
+    echo "1) Update feeds and run menuconfig"
+    echo "2) Skip feeds update and menuconfig, proceed to build"
     echo "3) Exit script"
-    read -p "Choice [1/2/3]: " choice
+    echo "4) Run menuconfig only (no feeds update)"
+    read -p "Choice [1/2/3/4]: " choice
 
     case "$choice" in
         1)
-            echo -e "${BLUE}Paste your custom feed lines (src-git ...) below. Press Enter on empty line to finish:${NC}"
-            while true; do
-                read -r line
-                [[ -z "$line" ]] && break
-                echo "$line" >> feeds.conf.default
-            done
-            echo -e "${GREEN}Custom feeds appended to feeds.conf.default.${NC}"
-
-            # Reset diverged feeds before update
-            reset_diverged_feed "feeds/php7"
-            reset_diverged_feed "feeds/qmodem"   # contoh, ganti sesuai kebutuhan
-
             echo -e "${BLUE}Updating feeds...${NC}"
             ./scripts/feeds update -a
             ./scripts/feeds install -a
@@ -79,10 +66,6 @@ while true; do
             break
             ;;
         2)
-            # Reset diverged feeds before build langsung
-            reset_diverged_feed "feeds/php7"
-            reset_diverged_feed "feeds/qmodem"   # contoh, ganti sesuai kebutuhan
-
             echo -e "${GREEN}Skipping feeds update and menuconfig.${NC}"
             break
             ;;
@@ -90,8 +73,13 @@ while true; do
             echo -e "${GREEN}Exiting without building.${NC}"
             exit 0
             ;;
+        4)
+            echo -e "${BLUE}Launching menuconfig only...${NC}"
+            make menuconfig
+            break
+            ;;
         *)
-            echo -e "${RED}Invalid input. Please enter 1, 2, or 3.${NC}"
+            echo -e "${RED}Invalid input. Please enter 1, 2, 3, or 4.${NC}"
             ;;
     esac
 done
