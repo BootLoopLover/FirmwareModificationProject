@@ -1,6 +1,6 @@
 #!/bin/bash
 #--------------------------------------------------------
-# OpenWrt Rebuild Script - Technical Style
+# OpenWrt Rebuild Script - Technical Style with Folder Selection
 # Author: Pakalolo Waraso
 #--------------------------------------------------------
 
@@ -9,9 +9,30 @@ GREEN='\033[1;32m'
 RED='\033[1;31m'
 NC='\033[0m'
 
-# --- Validasi Folder Build ---
-read -p "$(echo -e ${BLUE}Input existing build folder name (e.g., openwrt, immortalwrt, openwrt-ipq):${NC} )" build_folder
+# --- Pilih Folder Build Berdasarkan Distro ---
+echo -e "${BLUE}Select build folder to continue:${NC}"
+echo "1) openwrt"
+echo "2) immortalwrt"
+echo "3) openwrt-ipq"
+read -p "Choice [1/2/3]: " distro_choice
 
+case "$distro_choice" in
+    1)
+        build_folder="openwrt"
+        ;;
+    2)
+        build_folder="immortalwrt"
+        ;;
+    3)
+        build_folder="openwrt-ipq"
+        ;;
+    *)
+        echo -e "${RED}Invalid choice. Exiting.${NC}"
+        exit 1
+        ;;
+esac
+
+# --- Validasi Folder Build ---
 if [[ ! -d "$build_folder" ]]; then
     echo -e "${RED}Error: Folder '${build_folder}' not found. Abort.${NC}"
     exit 1
