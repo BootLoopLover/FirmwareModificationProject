@@ -15,10 +15,11 @@ clear
 echo "--------------------------------------------------------"
 echo -e "\033[1;34mUniversal Compile Openwrt/Immortalwrt/Openwrt-ipq\033[0m"
 echo "--------------------------------------------------------"
+
+#Tampilan Tambahan
 echo -e "\033[1;34mFirmware Modifications Project\033[0m"
 echo -e "\033[1;34mGithub : https://github.com/BootLoopLover\033[0m"
 echo -e "\033[1;34mTelegram : t.me/PakaloloWaras0\033[0m"
-echo "--------------------------------------------------------"
 
 # --- Pilih Folder Build Berdasarkan Distro ---
 echo -e "${BLUE}Select build folder to continue:${NC}"
