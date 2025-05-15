@@ -41,13 +41,13 @@ while true; do
 
     case "$choice" in
         1)
-            echo -e "${BLUE}Append custom feed sources to feeds.conf.default (empty line to finish):${NC}"
+            echo -e "${BLUE}Paste your custom feed lines (src-git ...) below. Press Enter on empty line to finish:${NC}"
             while true; do
                 read -r line
                 [[ -z "$line" ]] && break
                 echo "$line" >> feeds.conf.default
             done
-            echo -e "${GREEN}Custom feeds appended.${NC}"
+            echo -e "${GREEN}Custom feeds appended to feeds.conf.default.${NC}"
 
             echo -e "${BLUE}Updating feeds...${NC}"
             ./scripts/feeds update -a
