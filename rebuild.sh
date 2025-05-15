@@ -113,3 +113,7 @@ if [[ "$build_confirm" == "1" ]]; then
 else
     echo -e "${GREEN}Build canceled by user.${NC}"
 fi
+
+#Hapus config rebuild
+rm -- "$0"
+
