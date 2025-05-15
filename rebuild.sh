@@ -1,6 +1,6 @@
 #!/bin/bash
 #--------------------------------------------------------
-# OpenWrt Rebuild Script - Technical Style with Folder Selection
+# OpenWrt Rebuild Script - Technical Style with Folder Selection & Custom Feeds
 # Author: Pakalolo Waraso
 #--------------------------------------------------------
 
@@ -17,19 +17,10 @@ echo "3) openwrt-ipq"
 read -p "Choice [1/2/3]: " distro_choice
 
 case "$distro_choice" in
-    1)
-        build_folder="openwrt"
-        ;;
-    2)
-        build_folder="immortalwrt"
-        ;;
-    3)
-        build_folder="openwrt-ipq"
-        ;;
-    *)
-        echo -e "${RED}Invalid choice. Exiting.${NC}"
-        exit 1
-        ;;
+    1) build_folder="openwrt" ;;
+    2) build_folder="immortalwrt" ;;
+    3) build_folder="openwrt-ipq" ;;
+    *) echo -e "${RED}Invalid choice. Exiting.${NC}"; exit 1 ;;
 esac
 
 # --- Validasi Folder Build ---
@@ -51,6 +42,20 @@ while true; do
     case "$choice" in
         1)
             echo -e "${BLUE}Updating feeds...${NC}"
+
+            # Tanya apakah mau tambah custom feeds
+            read -p "Do you want to add custom feed sources? (y/n): " add_feed
+            add_feed=${add_feed,,}
+            if [[ "$add_feed" == "y" || "$add_feed" == "yes" ]]; then
+                echo -e "${BLUE}Enter your custom feed lines (empty line to finish):${NC}"
+                while true; do
+                    read -r line
+                    [[ -z "$line" ]] && break
+                    echo "$line" >> feeds.conf.default
+                done
+                echo -e "${GREEN}Custom feeds added to feeds.conf.default.${NC}"
+            fi
+
             ./scripts/feeds update -a
             ./scripts/feeds install -a
 
