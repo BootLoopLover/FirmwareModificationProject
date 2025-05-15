@@ -48,7 +48,9 @@ echo "--------------------------------------------------------"
 echo -e "${BLUE}Note : Make sure your feeds are ready before proceeding.${NC}"
 echo "--------------------------------------------------------"
 while true; do
+echo "--------------------------------------------------------"
     echo -e "\n${BLUE}Select action:${NC}"
+echo "--------------------------------------------------------"
     echo "1) Update feeds and run menuconfig"
     echo "2) Skip feeds update and menuconfig, proceed to build"
     echo "3) Exit script"
@@ -85,11 +87,12 @@ while true; do
 done
 
 # --- Konfirmasi Build ---
+echo "--------------------------------------------------------"
 echo -e "\n${BLUE}Proceed to build now?${NC}"
+echo "--------------------------------------------------------"
 echo "1) Yes, start build"
 echo "2) No, exit"
 read -p "Choice [1/2]: " build_confirm
-
 if [[ "$build_confirm" == "1" ]]; then
     echo -e "${BLUE}Starting build process...${NC}"
     start_time=$(date +%s)
