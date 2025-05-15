@@ -47,7 +47,8 @@ cd "$build_folder" || { echo -e "${RED}Failed to access folder. Abort.${NC}"; ex
 while true; do
     echo -e "\n${BLUE}Select action:${NC}"
 echo "--------------------------------------------------------"
-echo -e "${BLUE}Note : Make sure your feeds are ready before proceeding.${NC}"
+echo -e "${BLUE}Note : Make sure your feeds are ready before proceeding...${NC}"
+echo -e "${BLUE}Add your feeds now...${NC}"
 echo "--------------------------------------------------------"
     echo "1) Update feeds and run menuconfig"
     echo "2) Skip feeds update and menuconfig, proceed to build"
