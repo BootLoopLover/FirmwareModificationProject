@@ -22,6 +22,5 @@ wget https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject
 
 #Menu Aw1000
 ```
-wget https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/refs/heads/main/menu.sh
- && chmod +x menu.sh && ./menu.sh
+wget https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/refs/heads/main/menu.sh && chmod +x menu.sh && ./menu.sh
 ```
