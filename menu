@@ -7,10 +7,11 @@ while true; do
     echo "2. Ookla Speedtest"
     echo "3. Reboot AW1000"
     echo "4. Ping Google.com"
-    echo "5. Kembali ke menu utama"
-    echo "6. Exit"
+    echo "5. VnStat - Traffic Monitor"
+    echo "6. Kembali ke menu utama"
+    echo "7. Exit"
     echo "====================================="
-    read -p "Select an option [1-6]: " choice
+    read -p "Select an option [1-7]: " choice
 
     case "$choice" in
         1)
@@ -42,15 +43,23 @@ while true; do
             ping -c 5 google.com
             ;;
         5)
+            if ! command -v vnstat >/dev/null 2>&1; then
+                echo "vnStat not installed. Installing..."
+                opkg update && opkg install vnstat
+            fi
+            echo "Running vnStat..."
+            vnstat
+            ;;
+        6)
             echo "Kembali ke menu utama..."
             continue
             ;;
-        6)
+        7)
             echo "Exiting script. Goodbye!"
             exit 0
             ;;
         *)
-            echo "Invalid option. Please choose 1-6."
+            echo "Invalid option. Please choose 1-7."
             ;;
     esac
 done
