@@ -1,74 +1,26 @@
 #!/bin/sh
 
-# Fungsi: Instalasi jika belum ada
-run_or_install() {
-    CMD=$1
-    PKG=$2
-    if ! command -v "$CMD" >/dev/null 2>&1; then
-        echo "$CMD not installed. Installing..."
-        opkg update && opkg install "$PKG"
-    fi
-    "$CMD"
-}
-
-# Fungsi: Pasang firmware
-install_firmware() {
-    echo "\n===== Pilih Firmware Pakalolo ====="
-    echo "1. Install ImmortalWrt RC4"
-    echo "2. Install OpenWrt Final"
-    echo "3. Install PakaWrtNSS"
-    echo "4. Install PakaWrtNSS Lite"
-    echo "5. Kembali ke menu utama"
-    echo "==================================="
-    read -p "Pilih firmware [1-5]: " fwchoice
-
-    case "$fwchoice" in
-        1)
-            FWURL="http://abidarwi.sh/pakafirmware_immo31125-rc4.sh"
-            ;;
-        2)
-            FWURL="http://abidarwi.sh/pakafirmware_owrt-final.sh"
-            ;;
-        3)
-            FWURL="http://abidarwi.sh/pakanss30042025.sh"
-            ;;
-        4)
-            FWURL="http://abidarwi.sh/pakanss08052025.sh"
-            ;;
-        5)
-            echo "Kembali ke menu utama..."
-            return
-            ;;
-        *)
-            echo "Pilihan tidak valid."
-            return
-            ;;
-    esac
-
-    echo 'nameserver 8.8.8.8' >/tmp/resolv.conf.auto
-    echo "Mengunduh dan menjalankan installer..."
-    wget -q -O /tmp/installer "$FWURL" && chmod +x /tmp/installer
-
-    read -p "Masukkan token (tekan enter untuk default): " usertoken
-    [ -z "$usertoken" ] && usertoken="pakatoken"
-    /tmp/installer "$usertoken" || echo "Gagal menjalankan installer."
-}
-
-# Menu utama
 while true; do
-    echo "\n====== AW1000 Maintenance Menu ======"
+    echo ""
+    echo "====== AW1000 Maintenance Menu ======"
     echo "1. Run Htop"
     echo "2. Ookla Speedtest"
     echo "3. Reboot AW1000"
     echo "4. Ping Google.com"
-    echo "5. Flash Pakalolo Firmware"
+    echo "5. Kembali ke menu utama"
     echo "6. Exit"
     echo "====================================="
     read -p "Select an option [1-6]: " choice
 
     case "$choice" in
         1)
-            run_or_install htop htop
+            if command -v htop >/dev/null 2>&1; then
+                htop
+            else
+                echo "htop not installed. Installing..."
+                opkg update && opkg install htop
+                htop
+            fi
             ;;
         2)
             if ! command -v speedtest >/dev/null 2>&1; then
@@ -90,7 +42,8 @@ while true; do
             ping -c 5 google.com
             ;;
         5)
-            install_firmware
+            echo "Kembali ke menu utama..."
+            continue
             ;;
         6)
             echo "Exiting script. Goodbye!"
