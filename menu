@@ -8,9 +8,9 @@ NC="\033[0m" # No Color
 # Branding
 show_branding() {
     echo -e "${CYAN}"
-    echo "╔═══════════════════════════════════════════╗"
-    echo "║       FIRMWARE MODIFICATION PROJECT       ║"
-    echo "╚═══════════════════════════════════════════╝"
+    echo "╔══════════════════════════════════════════════╗"
+    echo "║         FIRMWARE MODIFICATION PROJECT        ║"
+    echo "╚══════════════════════════════════════════════╝"
     echo -e "${BLUE}Author: Pakalolo Waraso${NC}"
     echo -e "${BLUE}Special Thanks: Awiks Telegram Group${NC}"
     echo -e "${BLUE}Maintainer: https://github.com/BootLoopLover${NC}"
@@ -27,10 +27,9 @@ while true; do
     echo "3. Reboot AW1000"
     echo "4. Ping Google.com"
     echo "5. VnStat - Traffic Monitor"
-    echo "6. Kembali ke menu utama"
-    echo "7. Exit"
+    echo "6. Exit"
     echo "====================================="
-    read -p "Select an option [1-7]: " choice
+    read -p "Select an option [1-6]: " choice
 
     case "$choice" in
         1)
@@ -70,15 +69,11 @@ while true; do
             vnstat
             ;;
         6)
-            echo "Kembali ke menu utama..."
-            continue
-            ;;
-        7)
             echo "Exiting script. Goodbye!"
             exit 0
             ;;
         *)
-            echo "Invalid option. Please choose 1-7."
+            echo "Invalid option. Please choose 1-6."
             ;;
     esac
 
