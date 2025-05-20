@@ -8,13 +8,13 @@ NC="\033[0m" # No Color
 # Branding
 show_branding() {
     echo -e "${CYAN}"
-    echo "╔══════════════════════════════════════╗"
-    echo "║     FIRMWARE MODIFICATION PROJECT    ║"
-    echo "╚══════════════════════════════════════╝"
+    echo "╔═══════════════════════════════════════════╗"
+    echo "║       FIRMWARE MODIFICATION PROJECT       ║"
+    echo "╚═══════════════════════════════════════════╝"
     echo -e "${BLUE}Author: Pakalolo Waraso${NC}"
     echo -e "${BLUE}Special Thanks: Awiks Telegram Group${NC}"
     echo -e "${BLUE}Maintainer: https://github.com/BootLoopLover${NC}"
-    echo -e "${CYAN}=======================================================${NC}"
+    echo -e "${CYAN}============================================${NC}"
 }
 
 while true; do
