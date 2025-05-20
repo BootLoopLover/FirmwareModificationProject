@@ -14,8 +14,7 @@ show_branding() {
     echo -e "${BLUE}Author: Pakalolo Waraso${NC}"
     echo -e "${BLUE}Special Thanks: Awiks Telegram Group${NC}"
     echo -e "${BLUE}Maintainer: https://github.com/BootLoopLover${NC}"
-    echo "======================================================="
-    echo -e "${NC}"
+    echo -e "${CYAN}=======================================================${NC}"
 }
 
 while true; do
