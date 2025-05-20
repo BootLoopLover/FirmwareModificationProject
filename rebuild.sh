@@ -44,50 +44,57 @@ while true; do
     cd "$build_folder" || { echo -e "${RED}Failed to access folder. Try again.${NC}"; continue; }
 
     # --- Menu Pilihan Aksi ---
-    while true; do
-        echo -e "\n${BLUE}Select action:${NC}"
-        echo "--------------------------------------------------------"
-        echo -e "${BLUE}Note : Make sure your feeds are ready before proceeding...${NC}"
-        echo -e "\033[1;34mAdd your feeds now...\033[0m"
-        echo "--------------------------------------------------------"
-        echo "1) Update feeds and run menuconfig"
-        echo "2) Skip feeds update and menuconfig, proceed to build"
-        echo "3) Exit script"
-        echo "4) Run menuconfig only (no feeds update)"
-        echo "5) Back to folder selection"
-        read -p "Choice [1/2/3/4/5]: " choice
+while true; do
+    echo -e "\n${BLUE}Select action:${NC}"
+    echo "--------------------------------------------------------"
+    echo -e "${BLUE}Note : Make sure your feeds are ready before proceeding...${NC}"
+    echo -e "\033[1;34mAdd your feeds now...\033[0m"
+    echo "--------------------------------------------------------"
+    echo "1) Update feeds only"
+    echo "2) Update feeds and run menuconfig"
+    echo "3) Run make menuconfig only"
+    echo "4) Proceed to build"
+    echo "5) Back to folder selection"
+    echo "6) Exit script"
+    read -p "Choice [1-6]: " choice
 
-        case "$choice" in
-            1)
-                echo -e "${BLUE}Updating feeds...${NC}"
-                ./scripts/feeds update -a
-                ./scripts/feeds install -a
-                echo -e "${BLUE}Launching menuconfig...${NC}"
-                make menuconfig
-                break
-                ;;
-            2)
-                echo -e "${GREEN}Skipping feeds update and menuconfig.${NC}"
-                break
-                ;;
-            3)
-                echo -e "${GREEN}Exiting without building.${NC}"
-                exit 0
-                ;;
-            4)
-                echo -e "${BLUE}Launching menuconfig only...${NC}"
-                make menuconfig
-                break
-                ;;
-            5)
-                cd ..
-                continue 2
-                ;;
-            *)
-                echo -e "${RED}Invalid input. Please enter 1-5.${NC}"
-                ;;
-        esac
-    done
+    case "$choice" in
+        1)
+            echo -e "${BLUE}Updating feeds only...${NC}"
+            ./scripts/feeds update -a
+            ./scripts/feeds install -a
+            continue
+            ;;
+        2)
+            echo -e "${BLUE}Updating feeds...${NC}"
+            ./scripts/feeds update -a
+            ./scripts/feeds install -a
+            echo -e "${BLUE}Launching menuconfig...${NC}"
+            make menuconfig
+            break
+            ;;
+        3)
+            echo -e "${BLUE}Launching menuconfig only...${NC}"
+            make menuconfig
+            break
+            ;;
+        4)
+            echo -e "${GREEN}Proceeding to build...${NC}"
+            break
+            ;;
+        5)
+            cd ..
+            continue 2
+            ;;
+        6)
+            echo -e "${GREEN}Exiting without building.${NC}"
+            exit 0
+            ;;
+        *)
+            echo -e "${RED}Invalid input. Please enter a number between 1 and 6.${NC}"
+            ;;
+    esac
+done
 
     # --- Konfirmasi Build ---
     while true; do
