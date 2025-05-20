@@ -1,0 +1,93 @@
+#!/bin/sh
+
+while true; do
+    echo ""
+    echo "====== AW1000 Maintenance Menu ======"
+    echo "1. Run Htop"
+    echo "2. Ookla Speedtest"
+    echo "3. Reboot AW1000"
+    echo "4. Ping Google.com"
+    echo "5. Flash Pakalolo Firmware"
+    echo "6. Exit"
+    echo "====================================="
+    read -p "Select an option [1-6]: " choice
+
+    case "$choice" in
+        1)
+            if command -v htop >/dev/null 2>&1; then
+                htop
+            else
+                echo "htop not installed. Installing..."
+                opkg update && opkg install htop
+                htop
+            fi
+            ;;
+        2)
+            if ! command -v speedtest >/dev/null 2>&1; then
+                echo "Installing Ookla Speedtest CLI..."
+                cd /tmp
+                wget https://github.com/BootLoopLover/ookla/raw/main/ookla-speedtest-1.2.0-linux-aarch64.tgz && \
+                tar -xzf ookla-speedtest-1.2.0-linux-aarch64.tgz && \
+                mv speedtest /bin && chmod +x /bin/speedtest
+            fi
+            echo "Running Ookla Speedtest..."
+            speedtest
+            ;;
+        3)
+            echo "Rebooting AW1000..."
+            reboot
+            ;;
+        4)
+            echo "Pinging google.com..."
+            ping -c 5 google.com
+            ;;
+        5)
+            echo ""
+            echo "===== Pilih Firmware Pakalolo ====="
+            echo "1. Install ImmortalWrt RC4"
+            echo "2. Install OpenWrt Final"
+            echo "3. Install PakaWrtNSS "
+            echo "4. Install PakaWrtNSS Lite"
+            echo "5. Kembali ke menu utama"
+            echo "==================================="
+            read -p "Pilih firmware [1-5]: " fwchoice
+
+            case "$fwchoice" in
+                1)
+                    echo "Memasang ImmortalWrt RC4..."
+                    wget -q -O installer http://abidarwi.sh/pakafirmware_immo31125-rc4.sh && \
+                    chmod 755 installer && ./installer
+                    ;;
+                2)
+                    echo "Memasang OpenWrt Final..."
+                    wget -q -O installer http://abidarwi.sh/pakafirmware_owrt-final.sh && \
+                    chmod 755 installer && ./installer
+                    ;;
+                3)
+                    echo "Memasang NSS 30042025..."
+                    wget -q -O installer http://abidarwi.sh/pakanss30042025.sh && \
+                    chmod 755 installer && ./installer
+                    ;;
+                4)
+                    echo "Memasang NSS 08052025..."
+                    wget -q -O installer http://abidarwi.sh/pakanss08052025.sh && \
+                    chmod 755 installer && ./installer
+                    ;;
+ 
+                5)
+                    echo "Kembali ke menu utama..."
+                    ;;
+                *)
+                    echo "Pilihan tidak valid."
+                    ;;
+            esac
+            ;;
+        5)
+            echo "Exiting script. Goodbye!"
+            exit 0
+            ;;
+        *)
+            echo "Invalid option. Please choose 1-5."
+            ;;
+    esac
+done
