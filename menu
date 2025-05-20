@@ -1,6 +1,11 @@
 #!/bin/sh
 
-while true; do
+# Warna
+CYAN="\033[0;36m"
+BLUE="\033[1;34m"
+NC="\033[0m" # No Color
+
+# Branding
 show_branding() {
     echo -e "${CYAN}"
     echo "╔══════════════════════════════════════╗"
@@ -13,6 +18,9 @@ show_branding() {
     echo -e "${NC}"
 }
 
+while true; do
+    clear
+    show_branding
     echo ""
     echo "====== AW1000 Maintenance Menu ======"
     echo "1. Run Htop"
@@ -74,4 +82,7 @@ show_branding() {
             echo "Invalid option. Please choose 1-7."
             ;;
     esac
+
+    echo ""
+    read -p "Press [Enter] to return to menu..."
 done
