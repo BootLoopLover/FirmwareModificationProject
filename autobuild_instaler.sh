@@ -112,7 +112,7 @@ echo "=================================="
 read -p "Select feed option [1-4]: " choice
 
 case "$choice" in
-    2) echo 'src-git pakalolopackage https://github.com/BootLoopLover/custom-package.git' >> feeds.conf.default ;;
+    2) echo 'src-git custompackage https://github.com/BootLoopLover/custom-package.git' >> feeds.conf.default ;;
     3) echo 'src-git php7 https://github.com/BootLoopLover/openwrt-php7-package.git' >> feeds.conf.default ;;
     4)
         echo 'src-git pakalolopackage https://github.com/BootLoopLover/custom-package.git' >> feeds.conf.default
