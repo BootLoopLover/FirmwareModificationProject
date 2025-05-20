@@ -19,3 +19,9 @@ wget https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject
 ```
 wget https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/main/rebuild.sh && chmod +x rebuild.sh && ./rebuild.sh
 ```
+
+#Menu Aw1000
+```
+wget https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/refs/heads/main/menu.sh
+ && chmod +x menu.sh && ./menu.sh
+```
