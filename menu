@@ -33,27 +33,31 @@ while true; do
 
     case "$choice" in
         1)
-            if command -v htop >/dev/null 2>&1; then
-                htop
-            else
+            if ! command -v htop >/dev/null 2>&1; then
                 echo "htop not installed. Installing..."
-                opkg update && opkg install htop
-                htop
+                opkg update && opkg install htop || echo "Failed to install htop."
             fi
+            command -v htop >/dev/null 2>&1 && htop
             ;;
-                2)
+
+        2)
             if ! command -v speedtest >/dev/null 2>&1; then
                 echo "Installing Ookla Speedtest CLI..."
                 cd /tmp || exit
                 wget -O speedtest.tgz https://github.com/BootLoopLover/ookla/raw/main/ookla-speedtest-1.2.0-linux-aarch64.tgz
-                tar -xzf speedtest.tgz
-                # Check if speedtest binary is there
-                if [ -f speedtest ]; then
-                    mv speedtest /bin/speedtest
-                    chmod +x /bin/speedtest
+
+                if [ $? -eq 0 ]; then
+                    tar -xzf speedtest.tgz
+                    if [ -f speedtest ]; then
+                        mv speedtest /bin/speedtest
+                        chmod +x /bin/speedtest
+                    else
+                        echo "Error: speedtest binary not found after extraction."
+                        continue
+                    fi
                 else
-                    echo "Error: speedtest binary not found after extraction."
-                    exit 1
+                    echo "Download failed. Check internet connection."
+                    continue
                 fi
             fi
             echo "Running Ookla Speedtest..."
@@ -64,22 +68,26 @@ while true; do
             echo "Rebooting AW1000..."
             reboot
             ;;
+
         4)
             echo "Pinging google.com..."
-            ping -c 5 google.com
+            ping -c 5 google.com || echo "Ping failed. Check internet connection."
             ;;
+
         5)
             if ! command -v vnstat >/dev/null 2>&1; then
                 echo "vnStat not installed. Installing..."
-                opkg update && opkg install vnstat
+                opkg update && opkg install vnstat || echo "Failed to install vnstat."
             fi
             echo "Running vnStat..."
             vnstat
             ;;
+
         6)
             echo "Exiting script. Goodbye!"
             exit 0
             ;;
+
         *)
             echo "Invalid option. Please choose 1-6."
             ;;
