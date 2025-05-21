@@ -47,21 +47,21 @@ while true; do
                 wget -O speedtest.tgz https://github.com/BootLoopLover/ookla/raw/main/ookla-speedtest-1.2.0-linux-aarch64.tgz
 
                 if [ $? -eq 0 ]; then
-                    tar -xzf speedtest.tgz
-                    if [ -f speedtest ]; then
-                        mv speedtest /bin/speedtest
-                        chmod +x /bin/speedtest
-                    else
-                        echo "Error: speedtest binary not found after extraction."
-                        continue
-                    fi
+                    tar -xzf speedtest.tgz -C /tmp
+                    chmod +x /tmp/speedtest
+                    mv /tmp/speedtest /bin/speedtest
                 else
                     echo "Download failed. Check internet connection."
                     continue
                 fi
             fi
-            echo "Running Ookla Speedtest..."
-            /bin/speedtest
+
+            if [ -x /bin/speedtest ]; then
+                echo "Running Ookla Speedtest..."
+                /bin/speedtest
+            else
+                echo "Error: /bin/speedtest is not executable."
+            fi
             ;;
 
         3)
