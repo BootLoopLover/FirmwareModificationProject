@@ -21,6 +21,12 @@ wget https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject
 ```
 
 #Menu Aw1000
+Install
 ```
 wget -O /usr/bin/menu https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/main/menu && chmod +x /usr/bin/menu && /usr/bin/menu
+```
+
+Remove
+```
+rm -f /usr/bin/menu
 ```
