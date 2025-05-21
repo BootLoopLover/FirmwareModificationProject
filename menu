@@ -17,6 +17,12 @@ show_branding() {
     echo -e "${CYAN}============================================${NC}"
 }
 
+# Pastikan menu utama tersedia
+if [ ! -f /usr/bin/menu ]; then
+    echo "Fetching central menu script..."
+    wget -O /usr/bin/menu https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/main/menu && chmod +x /usr/bin/menu
+fi
+
 while true; do
     clear
     show_branding
@@ -49,8 +55,8 @@ while true; do
                 if [ $? -eq 0 ]; then
                     tar -xzf speedtest.tgz -C /tmp
                     if [ -f /tmp/speedtest ]; then
-                        chmod +x /tmp/speedtest
-                        mv /tmp/speedtest /bin/speedtest
+                        mv /tmp/speedtest /usr/bin/speedtest
+                        chmod +x /usr/bin/speedtest
                     else
                         echo "Error: speedtest binary not found after extraction."
                         continue
@@ -60,7 +66,6 @@ while true; do
                     continue
                 fi
             fi
-
             echo "Running Ookla Speedtest..."
             speedtest
             ;;
