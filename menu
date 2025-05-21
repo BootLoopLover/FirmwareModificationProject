@@ -48,21 +48,21 @@ while true; do
 
                 if [ $? -eq 0 ]; then
                     tar -xzf speedtest.tgz -C /tmp
-                    chmod +x /tmp/speedtest
-                    mv /tmp/speedtest /tmp/speedtest
+                    if [ -f /tmp/speedtest ]; then
+                        chmod +x /tmp/speedtest
+                        mv /tmp/speedtest /bin/speedtest
+                    else
+                        echo "Error: speedtest binary not found after extraction."
+                        continue
+                    fi
                 else
                     echo "Download failed. Check internet connection."
                     continue
                 fi
             fi
 
-            if [ -x /bin/speedtest ]; then
-                echo "Running Ookla Speedtest..."
-                /tmp/speedtest
-
-            else
-                echo "Error: /tmp/speedtest is not executable."
-            fi
+            echo "Running Ookla Speedtest..."
+            speedtest
             ;;
 
         3)
