@@ -7,35 +7,39 @@ NC="\033[0m" # No Color
 
 # Branding
 show_branding() {
-    echo -e "${CYAN}"
+    printf "${CYAN}"
     echo "╔════════════════════════════════════════════╗"
     echo "║        FIRMWARE MODIFICATION PROJECT       ║"
     echo "╚════════════════════════════════════════════╝"
-    echo -e "${BLUE}Author: Pakalolo Waraso${NC}"
-    echo -e "${BLUE}Special Thanks: Awiks Telegram Group${NC}"
-    echo -e "${BLUE}Maintainer: https://github.com/BootLoopLover${NC}"
-    echo -e "${CYAN}============================================${NC}"
+    printf "${BLUE}Author: Pakalolo Waraso${NC}\n"
+    printf "${BLUE}Special Thanks: Awiks Telegram Group${NC}\n"
+    printf "${BLUE}Maintainer: https://github.com/BootLoopLover${NC}\n"
+    printf "${CYAN}============================================${NC}\n"
 }
 
-# Pastikan menu utama tersedia
-if [ ! -f /usr/bin/menu ]; then
-    echo "Fetching central menu script..."
-    wget -O /usr/bin/menu https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/main/menu && chmod +x /usr/bin/menu
-fi
+# Cek dependensi dasar
+for cmd in wget tar opkg; do
+    if ! command -v $cmd >/dev/null 2>&1; then
+        echo "Error: $cmd tidak tersedia. Harap install terlebih dahulu."
+        exit 1
+    fi
+done
 
+# Menu utama
 while true; do
     clear
     show_branding
     echo ""
     echo "====== AW1000 Maintenance Menu ======"
-    echo "1. Run Htop"
-    echo "2. Ookla Speedtest"
-    echo "3. Reboot AW1000"
+    echo "1. Cpu Htop"
+    echo "2. Run Ookla Speedtest"
+    echo "3. Reboot Modem AW1000"
     echo "4. Ping Google.com"
     echo "5. VnStat - Traffic Monitor"
     echo "6. Exit"
     echo "====================================="
-    read -p "Select an option [1-6]: " choice
+    printf "Select an option [1-6]: "
+    read choice
 
     case "$choice" in
         1)
@@ -51,7 +55,6 @@ while true; do
                 echo "Installing Ookla Speedtest CLI..."
                 cd /tmp || exit
                 wget -O speedtest.tgz https://github.com/BootLoopLover/ookla/raw/main/ookla-speedtest-1.2.0-linux-aarch64.tgz
-
                 if [ $? -eq 0 ]; then
                     tar -xzf speedtest.tgz -C /tmp
                     if [ -f /tmp/speedtest ]; then
@@ -71,7 +74,7 @@ while true; do
             ;;
 
         3)
-            echo "Rebooting AW1000..."
+            echo "Rebooting Modem AW1000..."
             reboot
             ;;
 
@@ -100,5 +103,6 @@ while true; do
     esac
 
     echo ""
-    read -p "Press [Enter] to return to menu..."
+    printf "Press [Enter] to return to menu..."
+    read dummy
 done
