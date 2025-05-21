@@ -41,17 +41,25 @@ while true; do
                 htop
             fi
             ;;
-        2)
+                2)
             if ! command -v speedtest >/dev/null 2>&1; then
                 echo "Installing Ookla Speedtest CLI..."
                 cd /tmp || exit
-                wget https://github.com/BootLoopLover/ookla/raw/main/ookla-speedtest-1.2.0-linux-aarch64.tgz && \
-                tar -xzf ookla-speedtest-1.2.0-linux-aarch64.tgz && \
-                mv speedtest /bin && chmod +x /bin/speedtest
+                wget -O speedtest.tgz https://github.com/BootLoopLover/ookla/raw/main/ookla-speedtest-1.2.0-linux-aarch64.tgz
+                tar -xzf speedtest.tgz
+                # Check if speedtest binary is there
+                if [ -f speedtest ]; then
+                    mv speedtest /bin/speedtest
+                    chmod +x /bin/speedtest
+                else
+                    echo "Error: speedtest binary not found after extraction."
+                    exit 1
+                fi
             fi
             echo "Running Ookla Speedtest..."
-            speedtest
+            /bin/speedtest
             ;;
+
         3)
             echo "Rebooting AW1000..."
             reboot
