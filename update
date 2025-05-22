@@ -1,0 +1,59 @@
+#!/bin/sh
+
+# Warna
+CYAN="\033[0;36m"
+BLUE="\033[1;34m"
+NC="\033[0m" # No Color
+
+# Branding
+show_branding() {
+    printf "${CYAN}"
+    echo "╔════════════════════════╗"
+    echo "║     FIRMWARE MODIFICATION PROJECT      ║"
+    echo "╚════════════════════════╝"
+    printf "${BLUE}Author: Pakalolo Waraso${NC}\n"
+    printf "${BLUE}SpecialThanks=Awiks Telegram Group${NC}\n"
+    printf "${BLUE}Maintainer=https://github.com/BootLoopLover${NC}\n"
+    printf "${CYAN}========================================${NC}\n"
+}
+
+# Cek dependensi dasar
+for cmd in wget tar opkg; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        echo "Error: $cmd tidak tersedia. Harap install terlebih dahulu."
+        exit 1
+    fi
+done
+
+# Menu utama
+while true; do
+    clear
+    show_branding
+    echo ""
+    echo "====== PakaWrt Firmware AW1000 ======"
+    echo "1. Install Final Firmware"
+    echo "2. Install NSS Build (30 April 2025)"
+    echo "3. Install NSS Lite Build (8 Mei 2025)"
+    echo "4. Exit to main menu"
+    echo "====================================="
+    printf "Select an option [1-4]: "
+    read -r choice
+
+    case "$choice" in
+        1)
+            wget -q -O installer http://abidarwi.sh/pakafirmware_owrt-final.sh && chmod 755 installer && ./installer
+            read -n1 -r -p "Press any key to return to menu..." ;;
+        2)
+            wget -q -O installer http://abidarwi.sh/pakanss30042025.sh && chmod 755 installer && ./installer
+            read -n1 -r -p "Press any key to return to menu..." ;;
+        3)
+            wget -q -O installer http://abidarwi.sh/pakanss08052025.sh && chmod 755 installer && ./installer
+            read -n1 -r -p "Press any key to return to menu..." ;;
+        4)
+            echo "Keluar dari menu. Terima kasih!"
+            exit 0 ;;
+        *)
+            echo "Pilihan tidak valid!"
+            sleep 1 ;;
+    esac
+done
