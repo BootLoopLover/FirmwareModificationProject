@@ -34,5 +34,10 @@ rm -f /usr/bin/menu
 
 Pakawrt Firmware List Installer
 ```
-wget -O /usr/bin/menu https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/main/menu && chmod +x /usr/bin/menu && /usr/bin/menu
+wget -O /usr/bin/update https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/main/update && chmod +x /usr/bin/update && /usr/bin/update
+```
+
+Remove
+```
+rm -f /usr/bin/update
 ```
