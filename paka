@@ -9,7 +9,7 @@ NC="\033[0m" # No Color
 show_branding() {
     printf "${CYAN}"
     echo "╔════════════════════════════════════════════╗"
-    echo "║        PAKAWRT FIRMWARE - AW1000          ║"
+    echo "║        PAKAWRT FIRMWARE - AW1000           ║"
     echo "╚════════════════════════════════════════════╝"
     echo "   ___                   __                 "
     echo "  / _ | ___________ ____/ /_ _____ ____     "
