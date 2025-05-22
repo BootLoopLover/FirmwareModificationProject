@@ -24,6 +24,7 @@ wget https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject
 
 
 #Menu Aw1000
+
 Install
 ```
 chmod +x /usr/bin/speedtest && wget -O /usr/bin/menu https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/main/menu && chmod +x /usr/bin/menu && /usr/bin/menu
@@ -37,7 +38,9 @@ rm -f /usr/bin/menu
 
 ---
 
-Pakawrt Firmware List Installer
+#Pakawrt Firmware List Installer
+
+Update paka firmware
 ```
 wget -O /usr/bin/update https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/main/update && chmod +x /usr/bin/update && /usr/bin/update
 ```
