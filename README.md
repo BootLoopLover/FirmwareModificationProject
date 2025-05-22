@@ -30,3 +30,9 @@ Remove
 ```
 rm -f /usr/bin/menu
 ```
+
+
+Pakawrt Firmware List Installer
+```
+wget -O /usr/bin/menu https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/main/menu && chmod +x /usr/bin/menu && /usr/bin/menu
+```
