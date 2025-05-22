@@ -31,51 +31,11 @@ while true; do
     show_branding
     echo ""
     echo "====== PakaWrt Firmware AW1000 ======"
-    echo "1. Install Final Firmware"
+    echo "1. Install Openwrt Firmware"
     echo "2. Install NSS Build (30 April 2025)"
     echo "3. Install NSS Lite Build (8 Mei 2025)"
     echo "4. Exit to main menu"
-    echo "====================================="
-    printf "Select an option [1-4]: "
-    read -r choice
-#!/bin/sh
-
-# Warna
-CYAN="\033[0;36m"
-BLUE="\033[1;34m"
-NC="\033[0m" # No Color
-
-# Branding
-show_branding() {
-    printf "${CYAN}"
-    echo "╔════════════════════╗"
-    echo "║     PAKAWRT FIRMWARE AW1000     ║"
-    echo "╚════════════════════╝"
-    echo "Author=Pakalolo Waraso"
-    echo "SpecialThanks=Awiks Telegram Group"
-    echo "Maintainer=https://github.com/BootLoopLover"
-    echo "==========================================="
-}
-
-# Cek dependensi dasar
-for cmd in wget tar opkg; do
-    if ! command -v "$cmd" >/dev/null 2>&1; then
-        echo "Error: $cmd tidak tersedia. Harap install terlebih dahulu."
-        exit 1
-    fi
-done
-
-# Menu utama
-while true; do
-    clear
-    show_branding
-    echo ""
-    echo "====== PakaWrt Firmware AW1000 ======"
-    echo "1. Install Final Firmware"
-    echo "2. Install NSS Build (30 April 2025)"
-    echo "3. Install NSS Lite Build (8 Mei 2025)"
-    echo "4. Exit to main menu"
-    echo "====================================="
+    echo "==================================="
     printf "Select an option [1-4]: "
     read -r choice
 
