@@ -42,11 +42,11 @@ rm -f /usr/bin/menu
 
 Update paka firmware
 ```
-wget -O /usr/bin/update https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/main/update && chmod +x /usr/bin/update && /usr/bin/update
+wget -O /usr/bin/paka https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/main/paka && chmod +x /usr/bin/paka && /usr/bin/paka
 ```
 
 Remove
 ```
-rm -f /usr/bin/update
+rm -f /usr/bin/paka
 ```
 ---
