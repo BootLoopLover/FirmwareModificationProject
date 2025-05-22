@@ -45,7 +45,7 @@ while true; do
     show_branding
     echo ""
     echo "========== PakaWrt Firmware Menu =========="
-    echo "1. Install OpenWrt Firmware"
+    echo "1. Install OpenWrt 24.10.0"
     echo "2. Install NSS Build (30 April 2025)"
     echo "3. Install NSS Lite Build (8 Mei 2025)"
     echo "4. Exit to main menu"
