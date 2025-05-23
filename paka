@@ -1,9 +1,9 @@
 #!/bin/sh
 
 # ============================
-#  PakaWrt Installer Menu
-#  Platform: AW1000 / AArch64
-#  Author: Pakalolo Waraso
+#  🚀 PakaWrt Installer Menu
+#  📦 Platform: AW1000 / AArch64
+#  🧑‍💻 Author: Pakalolo Waraso
 #  ============================
 
 # Terminal Colors
@@ -22,18 +22,18 @@ URL_NSS_LITE="http://abidarwi.sh/pakanss08052025.sh"
 show_branding() {
     printf "${CYAN}"
     echo "╔═════════════════════════════════════════╗"
-    echo "║        PAKAWRT FIRMWARE - AW1000        ║"
+    echo "║     🚀 PAKAWRT FIRMWARE - AW1000 🚀     ║"
     echo "╚═════════════════════════════════════════╝"
-    printf "${BLUE}Author        : Pakalolo Waraso${NC}\n"
-    printf "${BLUE}Special Thanks: Awiks Telegram Group${NC}\n"
-    printf "${BLUE}Maintainer    : https://github.com/BootLoopLover${NC}\n"
+    printf "${BLUE}🧑‍💻 Author        : Pakalolo Waraso${NC}\n"
+    printf "${BLUE}💬 Special Thanks : Awiks Telegram Group${NC}\n"
+    printf "${BLUE}🔧 Maintainer     : https://github.com/BootLoopLover${NC}\n"
     printf "${CYAN}===========================================${NC}\n"
 }
 
 # Check dependencies
 for cmd in wget tar opkg; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
-        echo "Error: Perintah '$cmd' tidak tersedia. Harap install terlebih dahulu."
+        echo "❌ Error: Perintah '$cmd' tidak tersedia. Harap install terlebih dahulu."
         exit 1
     fi
 done
@@ -43,13 +43,13 @@ while true; do
     clear
     show_branding
     echo ""
-    echo "========== PakaWrt Firmware Menu =========="
-    echo "1. Install OpenWrt 24.10.0 (Vanilla)"
-    echo "2. Install NSS Build (30 April 2025)"
-    echo "3. Install NSS Lite Build (8 Mei 2025)"
-    echo "4. Exit to main menu"
+    echo "🛠️  ========== PakaWrt Firmware Menu ========== 🛠️"
+    echo "1️⃣  Install OpenWrt 24.10.0 (Vanilla)"
+    echo "2️⃣  Install NSS Build (30 April 2025)"
+    echo "3️⃣  Install NSS Lite Build (8 Mei 2025)"
+    echo "4️⃣  Keluar dari menu"
     echo "==========================================="
-    printf "Select an option [1-4]: "
+    printf "👉 Pilih opsi [1-4]: "
     read -r choice
 
     case "$choice" in
@@ -57,68 +57,67 @@ while true; do
             clear
             show_branding
             echo "==========================================="
-            echo "           PakaWrt / AW1000"
+            echo "🧩 Firmware: OpenWrt Vanilla"
             echo "==========================================="
-            echo "Kernel      : 6.6.73"
-            echo "Branch      : v24.10.0"
-            echo "Developer   : Pakalolo"
-            echo "Platform    : AW1000 / aarch64"
+            echo "🐧 Kernel     : 6.6.73"
+            echo "🧵 Branch     : v24.10.0"
+            echo "⚙️ Developer  : Pakalolo"
+            echo "📦 Platform   : AW1000 / aarch64"
             echo "==========================================="
-            echo "# Dirancang untuk modem 5G LTE & VPN (SIM unlimited, TTL64)."
-            echo "# Monitoring: VnStat"
-            echo "# Modem Tools: 3G Info, AT Command, Band Selector, SMS Manager"
-            echo "# Tambahan: Passwall 4.6.68, Tailscale, Adblock"
+            echo "🔍 Fitur:"
+            echo "  - 🌐 VnStat untuk monitoring trafik"
+            echo "  - 📶 3G Info, AT Cmd, Band Lock, SMS"
+            echo "  - 🔐 Passwall 4.6.68, Tailscale VPN"
+            echo "  - 🚫 Adblocker (opsional)"
             echo "==========================================="
-            echo
-            read -n1 -r -p "Press enter to continue your installation..."
+            echo ""
+            read -n1 -r -p "🔄 Tekan enter untuk mulai instalasi..."
             wget -q -O installer "$URL_OWRT" && chmod +x installer && ./installer
-            read -n1 -r -p "Press any key to return to menu..." ;;
+            read -n1 -r -p "✅ Tekan enter untuk kembali ke menu..." ;;
         2)
             clear
             show_branding
             echo "==========================================="
-            echo "            PakawrtNss AW1000"
+            echo "🧩 Firmware: NSS Build"
             echo "==========================================="
-            echo "Kernel      : 6.6.79"
-            echo "Branch      : 24.10-nss"
-            echo "Developer   : Pakalolo"
-            echo "Platform    : AW1000 / aarch64"
+            echo "🐧 Kernel     : 6.6.79"
+            echo "🧵 Branch     : v24.10-nss"
+            echo "⚙️ Developer  : Pakalolo"
+            echo "📦 Platform   : AW1000 / aarch64"
             echo "==========================================="
-            echo "# Fokus modem LTE/VPN, stabilitas tinggi"
-            echo "# Modem Tools: AT Cmd, Band Lock, SMS, QModem"
-            echo "# Tambahan: Passwall2, Internet Detector, Tailscale"
+            echo "🔍 Fitur:"
+            echo "  - 📡 AT Cmd, Band Lock, SMS Manager, QModem"
+            echo "  - 🔐 Passwall2, Internet Detector, Tailscale"
             echo "==========================================="
-            echo
-            read -n1 -r -p "Press enter to continue your installation..."
+            echo ""
+            read -n1 -r -p "🔄 Tekan enter untuk mulai instalasi..."
             wget -q -O installer "$URL_NSS" && chmod +x installer && ./installer
-            read -n1 -r -p "Press any key to return to menu..." ;;
+            read -n1 -r -p "✅ Tekan enter untuk kembali ke menu..." ;;
         3)
             clear
             show_branding
             echo "==========================================="
-            echo "          PakawrtNss Lite AW1000"
+            echo "🧩 Firmware: NSS Lite Build"
             echo "==========================================="
-            echo "Kernel      : 6.6.86"
-            echo "Branch      : 24.10-nss"
-            echo "Developer   : Pakalolo"
-            echo "Platform    : AW1000 / aarch64"
+            echo "🐧 Kernel     : 6.6.86"
+            echo "🧵 Branch     : v24.10-nss"
+            echo "⚙️ Developer  : Pakalolo"
+            echo "📦 Platform   : AW1000 / aarch64"
             echo "==========================================="
-            echo "📌 Catatan Penting:"
-            echo "# Support libernet, Support All SIM unlimited & VPN."
-            echo "# Hotspot: aktifkan TTL fix & semua CPU di interface"
-            echo "# Tools: Band Selector, QModem, Modem Info"
-            echo "# Tambahan: Passwall2"
+            echo "📌 Catatan:"
+            echo "  - 🛡️ Support Libernet & TTL fix untuk Hotspot"
+            echo "  - 📶 QModem, Modem Info, Band Selector"
+            echo "  - 🔐 Passwall2"
             echo "==========================================="
-            echo
-            read -n1 -r -p "Press enter to continue your installation..."
+            echo ""
+            read -n1 -r -p "🔄 Tekan enter untuk mulai instalasi..."
             wget -q -O installer "$URL_NSS_LITE" && chmod +x installer && ./installer
-            read -n1 -r -p "Press any key to return to menu..." ;;
+            read -n1 -r -p "✅ Tekan enter untuk kembali ke menu..." ;;
         4)
-            echo -e "\nTerima kasih telah menggunakan PakaWrt!"
+            echo -e "\n🙏 Terima kasih telah menggunakan PakaWrt!"
             exit 0 ;;
         *)
-            echo "Pilihan tidak valid! Silakan coba lagi."
+            echo "⚠️  Pilihan tidak valid! Silakan coba lagi."
             sleep 1 ;;
     esac
-
 done
