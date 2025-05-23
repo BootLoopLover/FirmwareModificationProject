@@ -43,12 +43,12 @@ while true; do
     clear
     show_branding
     echo ""
-    echo "🛠️  ========== PakaWrt Firmware Menu ========== 🛠️"
+    echo "🛠️  ===== PakaWrt Firmware Menu ===== 🛠️"
     echo "1️⃣  Install OpenWrt 24.10.0 (Vanilla)"
     echo "2️⃣  Install NSS Build (30 April 2025)"
     echo "3️⃣  Install NSS Lite Build (8 Mei 2025)"
     echo "4️⃣  Keluar dari menu"
-    echo "==========================================="
+    echo "======================================"
     printf "👉 Pilih opsi [1-4]: "
     read -r choice
 
