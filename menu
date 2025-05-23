@@ -9,7 +9,7 @@ NC="\033[0m" # No Color
 show_branding() {
     printf "${CYAN}"
     echo "╔════════════════════════════════════════════╗"
-    echo "║     🚀 FIRMWARE MODIFICATION PROJECT 🚀     ║"
+    echo "║     🚀 FIRMWARE MODIFICATION PROJECT 🚀    ║"
     echo "╚════════════════════════════════════════════╝"
     printf "${BLUE}👤 Author: Pakalolo Waraso${NC}\n"
     printf "${BLUE}💬 Special Thanks: Awiks Telegram Group${NC}\n"
