@@ -80,7 +80,7 @@ while true; do
             echo " - Firewall4 dengan dukungan penuh nftables"
             echo "==========================================="
             echo
-            read -n1 -r -p "Tekan tombol apa saja untuk memulai instalasi..."
+            read -n1 -r -p "Press enter to continue your installation..."
             echo
             wget -q -O installer http://abidarwi.sh/pakanss30042025.sh
             chmod +x installer && ./installer
