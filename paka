@@ -104,7 +104,7 @@ while true; do
             echo "Platform    : AW1000 / aarch64"
             echo "==========================================="
             echo "📌 Catatan Penting:"
-            echo "# Support libernet, cocok SIM unlimited & VPN."
+            echo "# Support libernet, Support All SIM unlimited & VPN."
             echo "# Hotspot: aktifkan TTL fix & semua CPU di interface"
             echo "# Tools: Band Selector, QModem, Modem Info"
             echo "# Tambahan: Passwall2"
