@@ -43,6 +43,7 @@ rm -f /usr/bin/menu
 
 #Pakawrt Firmware List Installer
 
+![Image](https://github.com/user-attachments/assets/53c2b6a6-c743-4f62-8024-8a8ccacb501f)
 
 Update paka firmware
 ```
