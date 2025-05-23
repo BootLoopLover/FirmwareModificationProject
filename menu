@@ -9,7 +9,7 @@ NC="\033[0m" # No Color
 show_branding() {
     printf "${CYAN}"
     echo "╔════════════════════════════════════════════╗"
-    echo "║     🚀 FIRMWARE MODIFICATION PROJECT 🚀    ║"
+    echo "║     🚀 FIRMWARE MODIFICATION PROJECT 🚀     ║"
     echo "╚════════════════════════════════════════════╝"
     printf "${BLUE}👤 Author: Pakalolo Waraso${NC}\n"
     printf "${BLUE}💬 Special Thanks: Awiks Telegram Group${NC}\n"
@@ -91,8 +91,8 @@ main_menu() {
         show_branding
         echo ""
         echo "======= 🛠️ AW1000 Maintenance Menu 🛠️ ======="
-        echo "1. 🖥️ CPU Monitor (htop)"
-        echo "2.  ⚡ Speedtest by Ookla"
+        echo "1. 🖥️  CPU Monitor (htop)"
+        echo "2. ⚡ Speedtest by Ookla"
         echo "3. 🔁 Reboot Modem AW1000"
         echo "4. 📡 Ping Google.com"
         echo "5. 📊 Traffic Monitor (vnStat)"
