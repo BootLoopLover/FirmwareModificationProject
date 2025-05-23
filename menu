@@ -18,91 +18,105 @@ show_branding() {
 }
 
 # Cek dependensi dasar
-for cmd in wget tar opkg; do
-    if ! command -v $cmd >/dev/null 2>&1; then
-        echo "Error: $cmd tidak tersedia. Harap install terlebih dahulu."
-        exit 1
+check_dependencies() {
+    for cmd in wget tar opkg; do
+        if ! command -v "$cmd" >/dev/null 2>&1; then
+            echo "Error: $cmd tidak tersedia. Harap install terlebih dahulu."
+            exit 1
+        fi
+    done
+}
+
+# Pasang htop
+run_htop() {
+    if ! command -v htop >/dev/null 2>&1; then
+        echo "htop tidak ditemukan. Menginstall..."
+        opkg update && opkg install htop || {
+            echo "Gagal menginstall htop."; return
+        }
     fi
-done
+    htop
+}
+
+# Jalankan speedtest
+run_speedtest() {
+    if ! command -v speedtest >/dev/null 2>&1; then
+        echo "Menginstall Ookla Speedtest CLI..."
+        cd /tmp || return
+        wget -O speedtest.tgz https://github.com/BootLoopLover/ookla/raw/main/ookla-speedtest-1.2.0-linux-aarch64.tgz
+        if [ $? -eq 0 ]; then
+            tar -xzf speedtest.tgz -C /tmp
+            if [ -f /tmp/speedtest ]; then
+                mv /tmp/speedtest /usr/bin/speedtest
+                chmod +x /usr/bin/speedtest
+            else
+                echo "Error: Binary speedtest tidak ditemukan setelah diekstrak."
+                return
+            fi
+        else
+            echo "Gagal mengunduh speedtest. Periksa koneksi internet."
+            return
+        fi
+    fi
+
+    # Pastikan binary executable
+    [ ! -x /usr/bin/speedtest ] && chmod +x /usr/bin/speedtest
+
+    echo "Menjalankan Ookla Speedtest..."
+    speedtest
+}
+
+# Jalankan ping
+run_ping() {
+    echo "Melakukan ping ke google.com..."
+    ping -c 5 google.com || echo "Ping gagal. Periksa koneksi internet."
+}
+
+# Jalankan vnStat
+run_vnstat() {
+    if ! command -v vnstat >/dev/null 2>&1; then
+        echo "vnStat tidak ditemukan. Menginstall..."
+        opkg update && opkg install vnstat || {
+            echo "Gagal menginstall vnstat."; return
+        }
+    fi
+    echo "Menjalankan vnStat..."
+    vnstat
+}
 
 # Menu utama
-while true; do
-    clear
-    show_branding
-    echo ""
-    echo "====== AW1000 Maintenance Menu ======"
-    echo "1. Cpu Htop"
-    echo "2. Run Ookla Speedtest"
-    echo "3. Reboot Modem AW1000"
-    echo "4. Ping Google.com"
-    echo "5. VnStat - Traffic Monitor"
-    echo "6. Exit"
-    echo "====================================="
-    printf "Select an option [1-6]: "
-    read choice
+main_menu() {
+    while true; do
+        clear
+        show_branding
+        echo ""
+        echo "====== AW1000 Maintenance Menu ======"
+        echo "1. Cpu Htop"
+        echo "2. Run Ookla Speedtest"
+        echo "3. Reboot Modem AW1000"
+        echo "4. Ping Google.com"
+        echo "5. VnStat - Traffic Monitor"
+        echo "6. Exit"
+        echo "====================================="
+        printf "Pilih opsi [1-6]: "
+        read choice
 
-    case "$choice" in
-        1)
-            if ! command -v htop >/dev/null 2>&1; then
-                echo "htop not installed. Installing..."
-                opkg update && opkg install htop || echo "Failed to install htop."
-            fi
-            command -v htop >/dev/null 2>&1 && htop
-            ;;
+        case "$choice" in
+            1) run_htop ;;
+            2) run_speedtest ;;
+            3) echo "Rebooting Modem AW1000..."; reboot ;;
+            4) run_ping ;;
+            5) run_vnstat ;;
+            6) echo "Keluar dari skrip. Sampai jumpa!"; exit 0 ;;
+            *) echo "Opsi tidak valid. Pilih antara 1-6." ;;
+        esac
 
-        2)
-            if ! command -v speedtest >/dev/null 2>&1; then
-                echo "Installing Ookla Speedtest CLI..."
-                cd /tmp || exit
-                wget -O speedtest.tgz https://github.com/BootLoopLover/ookla/raw/main/ookla-speedtest-1.2.0-linux-aarch64.tgz
-                if [ $? -eq 0 ]; then
-                    tar -xzf speedtest.tgz -C /tmp
-                    if [ -f /tmp/speedtest ]; then
-                        mv /tmp/speedtest /usr/bin/speedtest
-                        chmod +x /usr/bin/speedtest
-                    else
-                        echo "Error: speedtest binary not found after extraction."
-                        continue
-                    fi
-                else
-                    echo "Download failed. Check internet connection."
-                    continue
-                fi
-            fi
-            echo "Running Ookla Speedtest..."
-            speedtest
-            ;;
+        echo ""
+        printf "Tekan [Enter] untuk kembali ke menu..."
+        read dummy
+    done
+}
 
-        3)
-            echo "Rebooting Modem AW1000..."
-            reboot
-            ;;
-
-        4)
-            echo "Pinging google.com..."
-            ping -c 5 google.com || echo "Ping failed. Check internet connection."
-            ;;
-
-        5)
-            if ! command -v vnstat >/dev/null 2>&1; then
-                echo "vnStat not installed. Installing..."
-                opkg update && opkg install vnstat || echo "Failed to install vnstat."
-            fi
-            echo "Running vnStat..."
-            vnstat
-            ;;
-
-        6)
-            echo "Exiting script. Goodbye!"
-            exit 0
-            ;;
-
-        *)
-            echo "Invalid option. Please choose 1-6."
-            ;;
-    esac
-
-    echo ""
-    printf "Press [Enter] to return to menu..."
-    read dummy
-done
+# Eksekusi
+check_dependencies
+main_menu
