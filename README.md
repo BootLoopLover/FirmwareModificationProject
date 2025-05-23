@@ -25,6 +25,8 @@ wget https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject
 
 #Menu Aw1000
 
+![Image](https://github.com/user-attachments/assets/28fcff1e-54e4-4472-893b-d1275eb907b6)
+
 Install
 ```
 chmod +x /usr/bin/speedtest && wget -O /usr/bin/menu https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/main/menu && chmod +x /usr/bin/menu && /usr/bin/menu
@@ -41,7 +43,6 @@ rm -f /usr/bin/menu
 
 #Pakawrt Firmware List Installer
 
-![Image](https://github.com/user-attachments/assets/28fcff1e-54e4-4472-893b-d1275eb907b6)
 
 Update paka firmware
 ```
