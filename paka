@@ -45,6 +45,43 @@ while true; do
             chmod +x installer && ./installer
             read -n1 -r -p "Press any key to return to menu..." ;;
         2)
+            clear
+            show_branding
+            echo "==========================================="
+            echo "           PakawrtNss v24.10-nss"
+            echo "==========================================="
+            echo "Kernel      : 6.6.79"
+            echo "Developer   : Pakalolo"
+            echo "Platform    : AW1000 / aarch64"
+            echo
+            echo "# Dirancang untuk koneksi optimal menggunakan modem LTE & VPN."
+            echo "# Kompatibel dengan SIM data tanpa batas, mendukung stabilitas jangka panjang."
+            echo
+            echo "=== Fitur Utama ==="
+            echo "[Status & Monitoring]"
+            echo " - VnStat: Pemantauan trafik jaringan real-time"
+            echo
+            echo "[Modem Management Tools]"
+            echo " - AT Command Interface"
+            echo " - LTE Band Selector (pengunci band frekuensi)"
+            echo " - SMS Manager (terima/kirim pesan singkat)"
+            echo " - Informasi Modem Lengkap"
+            echo " - Dukungan QModem Interface"
+            echo
+            echo "[Layanan Tambahan]"
+            echo " - Passwall2: VPN & Proxy Manager terintegrasi"
+            echo " - Internet Detector: Pemantauan status koneksi aktif"
+            echo " - Tailscale: WireGuard VPN Mesh dengan integrasi cloud"
+            echo
+            echo "=== Fitur Tambahan ==="
+            echo " - Optimasi CPU dan akselerasi NSS"
+            echo " - Tema antarmuka Lamborghini (UI modifikasi)"
+            echo " - Konfigurasi siap pakai (preset config applied)"
+            echo " - Firewall4 dengan dukungan penuh nftables"
+            echo "==========================================="
+            echo
+            read -n1 -r -p "Tekan tombol apa saja untuk memulai instalasi..."
+            echo
             wget -q -O installer http://abidarwi.sh/pakanss30042025.sh
             chmod +x installer && ./installer
             read -n1 -r -p "Press any key to return to menu..." ;;
