@@ -24,10 +24,10 @@ show_branding() {
     echo "╔═════════════════════════════════════════╗"
     echo "║     🚀 PAKAWRT FIRMWARE - AW1000 🚀     ║"
     echo "╚═════════════════════════════════════════╝"
-    printf "${BLUE}🧑‍💻 Author        : Pakalolo Waraso${NC}\n"
-    printf "${BLUE}💬 Special Thanks : Awiks Telegram Group${NC}\n"
-    printf "${BLUE}🔧 Maintainer     : https://github.com/BootLoopLover${NC}\n"
-    printf "${CYAN}===========================================${NC}\n"
+    printf "${BLUE}👤 Author: Pakalolo Waraso${NC}\n"
+    printf "${BLUE}💬 Special Thanks: Awiks Telegram Group${NC}\n"
+    printf "${BLUE}🛠️ Maintainer: https://github.com/BootLoopLover${NC}\n"
+    printf "${CYAN}============================================${NC}\n"
 }
 
 # Check dependencies
