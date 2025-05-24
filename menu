@@ -8,9 +8,9 @@ NC="\033[0m" # No Color
 # Branding
 show_branding() {
     printf "${CYAN}"
-    echo "╔═══════════════════════════════╗"
+    echo "╔═══════════════════════════════════════════════════╗"
     echo "║         🚀 FIRMWARE MODIFICATION PROJECT 🚀       ║"
-    echo "╚═══════════════════════════════╝"
+    echo "╚═══════════════════════════════════════════════════╝"
     printf "${BLUE}👤 Author: Pakalolo Waraso${NC}\n"
     printf "${BLUE}💬 Special Thanks: Awiks Telegram Group${NC}\n"
     printf "${BLUE}🛠️ Maintainer: https://github.com/BootLoopLover${NC}\n"
@@ -97,7 +97,7 @@ main_menu() {
         echo "4. 📡 Ping Google.com"
         echo "5. 📊 Traffic Monitor (vnStat)"
         echo "6. ❎ Exit"
-        echo "====================================="
+        echo "============================================="
         printf "📥 Pilih opsi [1-6]: "
         read choice
 
