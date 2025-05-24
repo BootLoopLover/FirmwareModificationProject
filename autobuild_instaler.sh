@@ -19,6 +19,12 @@ echo -e "🌐 ${BLUE}GitHub   : https://github.com/BootLoopLover${NC}"
 echo -e "💬 ${BLUE}Telegram : t.me/PakaloloWaras0${NC}"
 echo "--------------------------------------------------------"
 
+# === 📁 Buat Folder Build Otomatis ===
+read -p "📁 Masukkan nama folder untuk build (default: openwrt_build): " folder_name
+folder_name="${folder_name:-openwrt_build}"
+mkdir -p "$folder_name" || { echo -e "${RED}❌ Gagal membuat folder build.${NC}"; exit 1; }
+cd "$folder_name" || exit 1
+
 # === 📦 Pilih Sumber OpenWrt ===
 echo -e "${BLUE}Select OpenWrt source:${NC}"
 echo "1) openwrt"
