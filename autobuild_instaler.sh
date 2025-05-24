@@ -27,7 +27,7 @@ ping -c 1 github.com > /dev/null 2>&1 || {
 }
 
 # === ⚙️ Variables ===
-preset_folder="preset-openwrt"
+preset_folder="preset"
 script_file="$(basename "$0")"
 
 # === 👋 Welcome Message ===
