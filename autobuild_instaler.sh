@@ -37,6 +37,31 @@ echo -e "${BLUE}🔧 Firmware Modifications Project${NC}"
 echo -e "${BLUE}🌐 GitHub : https://github.com/BootLoopLover${NC}"
 echo -e "${BLUE}💬 Telegram : t.me/PakaloloWaras0${NC}"
 echo "====================================================================="
+echo -e "${BLUE}🔁 Select build mode:${NC}"
+echo "1) 🆕 Fresh Build"
+echo "2) 🔁 Rebuild Existing Source"
+echo "====================================================================="
+read -p "🔢 Enter your choice [1/2]: " build_mode
+
+if [[ "$build_mode" == "2" ]]; then
+    echo -e "${BLUE}📂 Existing folders detected:${NC}"
+    for d in */; do [[ -d "$d/.git" ]] && echo " - ${d%/}"; done
+    read -p "📂 Enter the name of existing build folder: " distro
+    if [[ ! -d "$distro" ]]; then
+        echo -e "${RED}❌ Folder '$distro' not found. Exiting.${NC}"
+        exit 1
+    fi
+    cd "$distro" || { echo -e "${RED}❌ Failed to enter directory '$distro'.${NC}"; exit 1; }
+
+    echo -e "${GREEN}🔁 Rebuilding from existing folder '$distro'...${NC}"
+    ./scripts/feeds update -a
+    ./scripts/feeds install -a
+    make menuconfig
+    make -j$(nproc)
+    exit 0
+fi
+
+# === 📦 Select Distribution ===
 echo -e "${BLUE}📦 Select the firmware distribution to build:${NC}"
 echo "1) 🐧 OpenWrt"
 echo "2) 🚀 OpenWrt-IPQ"
@@ -44,7 +69,6 @@ echo "3) 🛡️ ImmortalWrt"
 echo "====================================================================="
 read -p "🔢 Enter your choice [1/2/3]: " choice
 
-# === 🔄 Distribution Selection ===
 case "$choice" in
     1)
         distro="openwrt"
@@ -63,25 +87,6 @@ case "$choice" in
         exit 1
         ;;
 esac
-
-# === 🧹 Rebuild Mode ===
-if [[ "$1" == "--rebuild" ]]; then
-    echo -e "${GREEN}🔁 Rebuilding existing source without cloning...${NC}"
-    cd "$distro" || { echo -e "${RED}❌ Folder $distro not found.${NC}"; exit 1; }
-    ./scripts/feeds update -a
-    ./scripts/feeds install -a
-    make menuconfig
-    make -j$(nproc)
-    exit 0
-fi
-
-# === 🚽 Cleanup Mode ===
-if [[ "$1" == "--clean" ]]; then
-    echo -e "${BLUE}🧽 Cleaning up previous directories and script...${NC}"
-    [ -d "$distro" ] && rm -rf "$distro"
-    [ -f "$script_file" ] && rm -f "$script_file"
-    exit 0
-fi
 
 # === 📥 Dependency Installation ===
 deps="build-essential clang flex bison g++ gawk gcc-multilib g++-multilib gettext git libncurses5-dev libssl-dev python3-setuptools rsync swig unzip zlib1g-dev file wget"
