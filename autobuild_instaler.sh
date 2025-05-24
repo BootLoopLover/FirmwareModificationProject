@@ -62,10 +62,10 @@ echo "3) 🐘 PHP7 Feed"
 echo "4) 🌐 Both Custom & PHP7"
 read -p "🔢 Select feed option [1-4]: " feed_choice
 case $feed_choice in
-    2) echo "src-git custom https://github.com/BootLoopLover/openwrt-package" >> feeds.conf.default;;
-    3) echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7" >> feeds.conf.default;;
-    4) echo "src-git custom https://github.com/BootLoopLover/openwrt-package" >> feeds.conf.default
-       echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7" >> feeds.conf.default;;
+    2) echo "src-git custom https://github.com/BootLoopLover/custom-package" >> feeds.conf.default;;
+    3) echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package" >> feeds.conf.default;;
+    4) echo "src-git custom https://github.com/BootLoopLover/custom-package" >> feeds.conf.default
+       echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package" >> feeds.conf.default;;
 esac
 
 # === ♻️ Update Feeds ===
