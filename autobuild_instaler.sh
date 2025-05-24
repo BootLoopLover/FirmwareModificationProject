@@ -20,6 +20,12 @@ if [[ "$current_path" == *" "* ]]; then
     exit 1
 fi
 
+# === 🔧 Internet Check ===
+ping -c 1 github.com > /dev/null 2>&1 || {
+    echo -e "${RED}❌ No internet connection. Please check your network.${NC}"
+    exit 1
+}
+
 # === ⚙️ Variables ===
 preset_folder="preset-openwrt"
 script_file="$(basename "$0")"
@@ -43,25 +49,33 @@ case "$choice" in
     1)
         distro="openwrt"
         repo="https://github.com/openwrt/openwrt.git"
-        deps="build-essential clang flex bison g++ gawk gcc-multilib g++-multilib gettext git libncurses5-dev libssl-dev python3-setuptools rsync swig unzip zlib1g-dev file wget"
         ;;
     2)
         distro="openwrt-ipq"
         repo="https://github.com/qosmio/openwrt-ipq.git"
-        deps="build-essential clang flex bison g++ gawk gcc-multilib g++-multilib gettext git libncurses5-dev libssl-dev python3-setuptools rsync swig unzip zlib1g-dev file wget"
         ;;
     3)
         distro="immortalwrt"
         repo="https://github.com/immortalwrt/immortalwrt.git"
-        deps="... (panjang, tidak diubah)"
         ;;
     *)
-        echo -e "${RED}🚫 Invalid choice. Exiting.${NC}"
+        echo -e "${RED}❌ Invalid choice. Exiting.${NC}"
         exit 1
         ;;
 esac
 
-# === 🧹 Cleanup Mode ===
+# === 🧹 Rebuild Mode ===
+if [[ "$1" == "--rebuild" ]]; then
+    echo -e "${GREEN}🔁 Rebuilding existing source without cloning...${NC}"
+    cd "$distro" || { echo -e "${RED}❌ Folder $distro not found.${NC}"; exit 1; }
+    ./scripts/feeds update -a
+    ./scripts/feeds install -a
+    make menuconfig
+    make -j$(nproc)
+    exit 0
+fi
+
+# === 🚽 Cleanup Mode ===
 if [[ "$1" == "--clean" ]]; then
     echo -e "${BLUE}🧽 Cleaning up previous directories and script...${NC}"
     [ -d "$distro" ] && rm -rf "$distro"
@@ -69,7 +83,8 @@ if [[ "$1" == "--clean" ]]; then
     exit 0
 fi
 
-# === 📦 Dependency Installation ===
+# === 📥 Dependency Installation ===
+deps="build-essential clang flex bison g++ gawk gcc-multilib g++-multilib gettext git libncurses5-dev libssl-dev python3-setuptools rsync swig unzip zlib1g-dev file wget"
 read -p "📥 Do you want to install required dependencies? (y/n): " update_deps
 update_deps=${update_deps,,}
 
@@ -87,13 +102,8 @@ echo -e "${BLUE}🔄 Cloning source code...${NC}"
 git clone "$repo" "$distro"
 cd "$distro"
 
-# === 🍴 Feed Update ===
-echo -e "${BLUE}🔁 Updating and installing feeds...${NC}"
-./scripts/feeds update -a
-./scripts/feeds install -a
-
-# === 🔀 Git Tag/Branch Selection ===
-echo -e "${BLUE}🏷️ Available Git tags:${NC}"
+# === 🍳 Git Tag/Branch Selection ===
+echo -e "${BLUE}🌿 Available Git tags:${NC}"
 git tag | sort -V
 read -p "🔖 Enter tag to checkout (leave empty for default branch): " TARGET_TAG
 [[ -n "$TARGET_TAG" ]] && git fetch --tags && git checkout "$TARGET_TAG"
@@ -102,7 +112,12 @@ branch_name="build-$(date +%Y%m%d-%H%M)"
 echo -e "${BLUE}🌿 Creating new branch: $branch_name${NC}"
 git switch -c "$branch_name"
 
-# === 🍱 Additional Feeds ===
+# === 🍻 Feed Update ===
+echo -e "${BLUE}🔁 Updating and installing feeds...${NC}"
+./scripts/feeds update -a
+./scripts/feeds install -a
+
+# === 🍟 Additional Feeds ===
 echo "========== 📦 Feeds Menu =========="
 echo "1) ❌ None"
 echo "2) 🧰 Add Custom Package Feed"
@@ -116,8 +131,7 @@ case "$choice" in
     3) echo 'src-git php7 https://github.com/BootLoopLover/openwrt-php7-package.git' >> feeds.conf.default ;;
     4)
         echo 'src-git custompackage https://github.com/BootLoopLover/custom-package.git' >> feeds.conf.default
-        echo 'src-git php7 https://github.com/BootLoopLover/openwrt-php7-package.git' >> feeds.conf.default
-        ;;
+        echo 'src-git php7 https://github.com/BootLoopLover/openwrt-php7-package.git' >> feeds.conf.default ;;
     *) echo "⚠️ No feeds added." ;;
 esac
 
@@ -126,7 +140,7 @@ read -p "⏸️ Press [Enter] to continue after modifying feeds..." temp
 # === 🗂️ Preset Configuration ===
 echo "========== ⚙️ Preset Menu =========="
 echo "1) ❌ None"
-echo "2) 🧾 preset-openwrt"
+echo "2) 📜 preset-openwrt"
 echo "3) 🛡️ preset-immortalwrt"
 echo "4) ⚡ preset-nss"
 echo "5) 📦 All"
@@ -150,7 +164,7 @@ clone_and_copy_preset() {
 [[ "$preset_choice" == "3" || "$preset_choice" == "5" ]] && clone_and_copy_preset "https://github.com/BootLoopLover/preset.git" "preset-immortalwrt"
 [[ "$preset_choice" == "4" || "$preset_choice" == "5" ]] && clone_and_copy_preset "https://github.com/BootLoopLover/preset.git" "preset-nss"
 
-# === 🔁 Re-update Feeds ===
+# === 🔄 Re-update Feeds ===
 echo -e "${BLUE}🔄 Re-updating feeds...${NC}"
 ./scripts/feeds update -a
 ./scripts/feeds install -a
@@ -167,12 +181,13 @@ fi
 echo -e "${BLUE}🏗️ Starting the build...${NC}"
 start_time=$(date +%s)
 
-if make -j$(nproc); then
-    echo -e "${GREEN}✅ Build completed successfully.${NC}"
+LOG_FILE="build-$(date +%Y%m%d-%H%M).log"
+if make -j$(nproc) 2>&1 | tee "$LOG_FILE"; then
+    echo -e "${GREEN}✅ Build completed successfully. Log: ${LOG_FILE}${NC}"
 else
-    echo -e "${RED}⚠️ Initial build failed. Retrying with verbose output...${NC}"
-    make -j1 V=s
-    echo -e "${RED}⚠️ Build completed with warnings or errors.${NC}"
+    echo -e "${RED}⚠ Initial build failed. Retrying with verbose output...${NC}"
+    make -j1 V=s 2>&1 | tee "$LOG_FILE"
+    echo -e "${RED}⚠ Build completed with warnings or errors. Log: ${LOG_FILE}${NC}"
 fi
 
 # === ⏱️ Build Time ===
@@ -180,7 +195,10 @@ end_time=$(date +%s)
 duration=$((end_time - start_time))
 echo -e "${BLUE}🕒 Build duration: $((duration / 3600)) hour(s) and $(((duration % 3600) / 60)) minute(s).${NC}"
 
-# === 🧹 Clean Up ===
+# === 🧽 Clean Up ===
 cd ..
 echo -e "${BLUE}🧽 Cleaning up script file: $script_file${NC}"
 rm -f "$script_file"
+
+read -p "📁 Open build folder? (y/n): " open_folder
+[[ "${open_folder,,}" =~ ^(y|yes)$ ]] && xdg-open "$distro/bin" || echo -e "${BLUE}👋 Done.${NC}"
