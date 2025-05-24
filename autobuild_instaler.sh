@@ -185,7 +185,7 @@ clone_and_copy_preset() {
 skip_menuconfig=false
 
 if [[ "$preset_choice" == "2" ]]; then
-    clone_and_copy_preset "https://github.com/BootLoopLover/preset.git" "preset-openwrt"
+    clone_and_copy_preset "https://github.com/BootLoopLover/preset.git" "preset"
 elif [[ "$preset_choice" == "1" ]]; then
     echo "⚠️ No preset selected."
 else
