@@ -97,7 +97,7 @@ main_menu() {
         echo "4. 📡 Ping Google.com"
         echo "5. 📊 Traffic Monitor (vnStat)"
         echo "6. ❎ Exit"
-        echo "============================================="
+        echo "============================================"
         printf "📥 Pilih opsi [1-6]: "
         read choice
 
