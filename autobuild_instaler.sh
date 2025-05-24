@@ -146,9 +146,9 @@ clone_and_copy_preset() {
     [ -f "../$folder_name/config-nss" ] && cp "../$folder_name/config-nss" .config && skip_menuconfig=true
 }
 
-[[ "$preset_choice" == "2" || "$preset_choice" == "5" ]] && clone_and_copy_preset "https://github.com/BootLoopLover/preset-openwrt.git" "preset-openwrt"
-[[ "$preset_choice" == "3" || "$preset_choice" == "5" ]] && clone_and_copy_preset "https://github.com/BootLoopLover/preset-immortalwrt.git" "preset-immortalwrt"
-[[ "$preset_choice" == "4" || "$preset_choice" == "5" ]] && clone_and_copy_preset "https://github.com/BootLoopLover/preset-nss.git" "preset-nss"
+[[ "$preset_choice" == "2" || "$preset_choice" == "5" ]] && clone_and_copy_preset "https://github.com/BootLoopLover/preset/preset-openwrt.git" "preset-openwrt"
+[[ "$preset_choice" == "3" || "$preset_choice" == "5" ]] && clone_and_copy_preset "https://github.com/BootLoopLover/preset/preset-immortalwrt.git" "preset-immortalwrt"
+[[ "$preset_choice" == "4" || "$preset_choice" == "5" ]] && clone_and_copy_preset "https://github.com/BootLoopLover/preset/preset-nss.git" "preset-nss"
 
 # === 🔁 Re-update Feeds ===
 echo -e "${BLUE}🔄 Re-updating feeds...${NC}"
