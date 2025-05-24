@@ -53,36 +53,11 @@ if [[ "$build_mode" == "2" ]]; then
     fi
     cd "$distro" || { echo -e "${RED}❌ Failed to enter directory '$distro'.${NC}"; exit 1; }
 
-    echo -e "${BLUE}⚙️ Rebuild Options:${NC}"
-    echo "1) 🛠️ Run menuconfig before build"
-    echo "2) 🚀 Build directly without menuconfig"
-    read -p "🔢 Enter your choice [1/2]: " rebuild_option
-
     echo -e "${GREEN}🔁 Rebuilding from existing folder '$distro'...${NC}"
     ./scripts/feeds update -a
     ./scripts/feeds install -a
-
-    if [[ "$rebuild_option" == "1" ]]; then
-        make menuconfig
-    else
-        echo -e "${BLUE}⚙️ Skipping menuconfig...${NC}"
-    fi
-
-    echo -e "${BLUE}🔨 Starting build...${NC}"
-    start_time=$(date +%s)
-
-    LOG_FILE="rebuild-$(date +%Y%m%d-%H%M).log"
-    if make -j$(nproc) 2>&1 | tee "$LOG_FILE"; then
-        echo -e "${GREEN}✅ Build completed successfully. Log: ${LOG_FILE}${NC}"
-    else
-        echo -e "${RED}⚠ Initial build failed. Retrying with verbose output...${NC}"
-        make -j1 V=s 2>&1 | tee "$LOG_FILE"
-        echo -e "${RED}⚠ Build completed with warnings or errors. Log: ${LOG_FILE}${NC}"
-    fi
-
-    end_time=$(date +%s)
-    duration=$((end_time - start_time))
-    echo -e "${BLUE}🕒 Build duration: $((duration / 3600)) hour(s) and $(((duration % 3600) / 60)) minute(s).${NC}"
+    make menuconfig
+    make -j$(nproc)
     exit 0
 fi
 
@@ -172,16 +147,14 @@ echo "========== ⚙️ Preset Menu =========="
 echo "1) ❌ None"
 echo "2) 📜 preset"
 echo "=================================="
-read -p "🔢 Select preset option [1-5]: " preset_choice
-
-skip_menuconfig=false
+read -p "🔢 Select preset option [1-2]: " preset_choice
 
 clone_and_copy_preset() {
     local repo_url=$1
     local folder_name=$2
     echo -e "${BLUE}📥 Cloning ${folder_name}...${NC}"
     git clone "$repo_url" "../$folder_name" || {
-        echo -e "${RED}❌ Failed to clone ${folder_name}.${NC}"; return
+        echo -e "${RED}❌ Failed to clone ${folder_name}.${NC}"; return 1
     }
 
     echo -e "${BLUE}📁 Available folders in $folder_name:${NC}"
@@ -189,7 +162,7 @@ clone_and_copy_preset() {
 
     if [[ ${#folders[@]} -eq 0 ]]; then
         echo -e "${RED}⚠️ No folders found in $folder_name.${NC}"
-        return
+        return 1
     fi
 
     for i in "${!folders[@]}"; do
@@ -202,14 +175,34 @@ clone_and_copy_preset() {
     if [[ -d "$selected_folder" ]]; then
         echo -e "${GREEN}📂 Copying from folder: ${folders[$((folder_choice-1))]}${NC}"
         cp -rf "$selected_folder"/* ./
+        return 0
     else
         echo -e "${RED}❌ Invalid selection. Skipping folder copy.${NC}"
+        return 1
     fi
 }
 
-[[ "$preset_choice" == "2" || "$preset_choice" == "5" ]] && clone_and_copy_preset "https://github.com/BootLoopLover/preset.git" "preset-openwrt"
-[[ "$preset_choice" == "3" || "$preset_choice" == "5" ]] && clone_and_copy_preset "https://github.com/BootLoopLover/preset.git" "preset-immortalwrt"
-[[ "$preset_choice" == "4" || "$preset_choice" == "5" ]] && clone_and_copy_preset "https://github.com/BootLoopLover/preset.git" "preset-nss"
+skip_menuconfig=false
+
+if [[ "$preset_choice" == "2" ]]; then
+    clone_and_copy_preset "https://github.com/BootLoopLover/preset.git" "preset-openwrt"
+elif [[ "$preset_choice" == "1" ]]; then
+    echo "⚠️ No preset selected."
+else
+    echo -e "${RED}❌ Invalid preset choice. Exiting.${NC}"
+    exit 1
+fi
+
+# --- AUTO COPY preset-nss dan config-nss ke build folder jika ada ---
+if [[ -d "../preset-nss" ]]; then
+    echo -e "${BLUE}📥 Found 'preset-nss' folder. Copying content including config-nss...${NC}"
+    cp -rf ../preset-nss/* ./
+    if [[ -f "../preset-nss/config-nss" ]]; then
+        echo -e "${BLUE}📝 Copying config-nss as .config...${NC}"
+        cp ../preset-nss/config-nss .config
+        skip_menuconfig=true
+    fi
+fi
 
 # === 🔄 Re-update Feeds ===
 echo -e "${BLUE}🔄 Re-updating feeds...${NC}"
