@@ -53,11 +53,36 @@ if [[ "$build_mode" == "2" ]]; then
     fi
     cd "$distro" || { echo -e "${RED}❌ Failed to enter directory '$distro'.${NC}"; exit 1; }
 
+    echo -e "${BLUE}⚙️ Rebuild Options:${NC}"
+    echo "1) 🛠️ Run menuconfig before build"
+    echo "2) 🚀 Build directly without menuconfig"
+    read -p "🔢 Enter your choice [1/2]: " rebuild_option
+
     echo -e "${GREEN}🔁 Rebuilding from existing folder '$distro'...${NC}"
     ./scripts/feeds update -a
     ./scripts/feeds install -a
-    make menuconfig
-    make -j$(nproc)
+
+    if [[ "$rebuild_option" == "1" ]]; then
+        make menuconfig
+    else
+        echo -e "${BLUE}⚙️ Skipping menuconfig...${NC}"
+    fi
+
+    echo -e "${BLUE}🔨 Starting build...${NC}"
+    start_time=$(date +%s)
+
+    LOG_FILE="rebuild-$(date +%Y%m%d-%H%M).log"
+    if make -j$(nproc) 2>&1 | tee "$LOG_FILE"; then
+        echo -e "${GREEN}✅ Build completed successfully. Log: ${LOG_FILE}${NC}"
+    else
+        echo -e "${RED}⚠ Initial build failed. Retrying with verbose output...${NC}"
+        make -j1 V=s 2>&1 | tee "$LOG_FILE"
+        echo -e "${RED}⚠ Build completed with warnings or errors. Log: ${LOG_FILE}${NC}"
+    fi
+
+    end_time=$(date +%s)
+    duration=$((end_time - start_time))
+    echo -e "${BLUE}🕒 Build duration: $((duration / 3600)) hour(s) and $(((duration % 3600) / 60)) minute(s).${NC}"
     exit 0
 fi
 
@@ -145,10 +170,7 @@ read -p "⏸️ Press [Enter] to continue after modifying feeds..." temp
 # === 🗂️ Preset Configuration ===
 echo "========== ⚙️ Preset Menu =========="
 echo "1) ❌ None"
-echo "2) 📜 preset-openwrt"
-echo "3) 🛡️ preset-immortalwrt"
-echo "4) ⚡ preset-nss"
-echo "5) 📦 All"
+echo "2) 📜 preset"
 echo "=================================="
 read -p "🔢 Select preset option [1-5]: " preset_choice
 
@@ -161,8 +183,28 @@ clone_and_copy_preset() {
     git clone "$repo_url" "../$folder_name" || {
         echo -e "${RED}❌ Failed to clone ${folder_name}.${NC}"; return
     }
-    [ -d "../$folder_name/files" ] && mkdir -p files && cp -r "../$folder_name/files/"* files/
-    [ -f "../$folder_name/config-nss" ] && cp "../$folder_name/config-nss" .config && skip_menuconfig=true
+
+    echo -e "${BLUE}📁 Available folders in $folder_name:${NC}"
+    mapfile -t folders < <(find "../$folder_name" -mindepth 1 -maxdepth 1 -type d -exec basename {} \;)
+
+    if [[ ${#folders[@]} -eq 0 ]]; then
+        echo -e "${RED}⚠️ No folders found in $folder_name.${NC}"
+        return
+    fi
+
+    for i in "${!folders[@]}"; do
+        echo "$((i+1))) ${folders[$i]}"
+    done
+
+    read -p "🔢 Select folder to copy [1-${#folders[@]}]: " folder_choice
+    selected_folder="../$folder_name/${folders[$((folder_choice-1))]}"
+
+    if [[ -d "$selected_folder" ]]; then
+        echo -e "${GREEN}📂 Copying from folder: ${folders[$((folder_choice-1))]}${NC}"
+        cp -rf "$selected_folder"/* ./
+    else
+        echo -e "${RED}❌ Invalid selection. Skipping folder copy.${NC}"
+    fi
 }
 
 [[ "$preset_choice" == "2" || "$preset_choice" == "5" ]] && clone_and_copy_preset "https://github.com/BootLoopLover/preset.git" "preset-openwrt"
