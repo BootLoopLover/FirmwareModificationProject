@@ -44,11 +44,7 @@ checkout_tag() {
             echo "$((i+1))) ${tag_list[$i]}"
         done
         read -p "🔖 Select tag to checkout [1-${#tag_list[@]}] or press Enter to skip: " tag_index
-        if [[ -n "$tag_index" && "$tag_index" -ge 1 && "$tag_index" -le ${#tag_list[@]} ]]; then
-            git checkout "${tag_list[$((tag_index-1))]}" || {
-                echo -e "${RED}❌ Failed to checkout tag.${NC}"; exit 1;
-            }
-        fi
+        [[ -n "$tag_index" ]] && git checkout "${tag_list[$((tag_index-1))]}"
     fi
 }
 
@@ -60,18 +56,11 @@ add_feeds() {
     echo "4) 🌐 Both Custom & PHP7"
     read -p "🔢 Select feed option [1-4]: " feed_choice
     case "$feed_choice" in
-        2) echo "src-git custom https://github.com/BootLoopLover/custom-package.git" >> feeds.conf.default;;
-        3) echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package.git" >> feeds.conf.default;;
-        4) echo "src-git custom https://github.com/BootLoopLover/custom-package.git" >> feeds.conf.default
-           echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package.git" >> feeds.conf.default;;
-        *) echo -e "${YELLOW}No additional feeds selected.${NC}";;
+        2) echo "src-git custom https://github.com/BootLoopLover/custom-package" >> feeds.conf.default;;
+        3) echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package" >> feeds.conf.default;;
+        4) echo "src-git custom https://github.com/BootLoopLover/custom-package" >> feeds.conf.default
+           echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package" >> feeds.conf.default;;
     esac
-}
-
-update_feeds() {
-    echo -e "${BLUE}Updating and installing feeds...${NC}"
-    ./scripts/feeds update -a || { echo -e "${RED}❌ Feed update failed!${NC}"; exit 1; }
-    ./scripts/feeds install -a || { echo -e "${RED}❌ Feed install failed!${NC}"; exit 1; }
 }
 
 clone_preset() {
@@ -88,13 +77,9 @@ clone_preset() {
         echo "$((i+1))) ${folders[$i]}"
     done
     read -p "🔢 Select preset folder [1-${#folders[@]}]: " preset_choice
-    if [[ "$preset_choice" -ge 1 && "$preset_choice" -le ${#folders[@]} ]]; then
-        selected_folder="../preset/${folders[$((preset_choice-1))]}"
-        cp -rf "$selected_folder"/* ./
-        [[ -f "$selected_folder/config-nss" ]] && cp "$selected_folder/config-nss" .config
-    else
-        echo -e "${YELLOW}No valid preset selected. Continuing without preset.${NC}"
-    fi
+    selected_folder="../preset/${folders[$((preset_choice-1))]}"
+    cp -rf "$selected_folder"/* ./
+    [[ -f "$selected_folder/config-nss" ]] && cp "$selected_folder/config-nss" .config
 }
 
 build_action_menu() {
@@ -107,8 +92,8 @@ build_action_menu() {
     echo "6) ❌ Exit"
     read -p "📌 Choice [1-6]: " choice
     case "$choice" in
-        1) update_feeds ;;
-        2) update_feeds; make menuconfig ;;
+        1) ./scripts/feeds update -a && ./scripts/feeds install -a ;;
+        2) ./scripts/feeds update -a && ./scripts/feeds install -a; make menuconfig ;;
         3) make menuconfig ;;
         4) return 0 ;;
         5) cd ..; return 1 ;;
@@ -124,7 +109,7 @@ start_build() {
     if make -j$(nproc); then
         echo -e "${GREEN}✅ Build success!${NC}"
     else
-        echo -e "${RED}⚠️ Build failed, retrying with verbose output...${NC}"
+        echo -e "${RED}⚠️ Build failed, retrying...${NC}"
         make -j1 V=s
     fi
     end_time=$(date +%s)
@@ -142,9 +127,7 @@ fresh_build() {
     git clone "$git_url" . || { echo -e "${RED}❌ Git clone failed.${NC}"; exit 1; }
     checkout_tag
     add_feeds
-
-    update_feeds
-
+    ./scripts/feeds update -a && ./scripts/feeds install -a
     clone_preset
     [[ ! -f .config ]] && make menuconfig
     start_build
@@ -176,20 +159,17 @@ rebuild_mode() {
 }
 
 main_menu() {
-    while true; do
-        show_banner
-        echo "1️⃣ Fresh build (baru)"
-        echo "2️⃣ Rebuild existing folder"
-        echo "3️⃣ ❌ Exit"
-        read -p "📌 Select option [1-3]: " main_choice
-        case "$main_choice" in
-            1) fresh_build ;;
-            2) rebuild_mode ;;
-            3) echo -e "${GREEN}👋 Exiting...${NC}"; exit 0 ;;
-            *) echo -e "${RED}⚠️ Invalid choice.${NC}";;
-        esac
-        echo
-    done
+    show_banner
+    echo "1️⃣ Fresh build (baru)"
+    echo "2️⃣ Rebuild existing folder"
+    echo "3️⃣ ❌ Exit"
+    read -p "📌 Select option [1-3]: " main_choice
+    case "$main_choice" in
+        1) fresh_build ;;
+        2) rebuild_mode ;;
+        3) echo -e "${GREEN}👋 Exiting...${NC}"; exit 0 ;;
+        *) echo -e "${RED}⚠️ Invalid choice.${NC}"; exit 1 ;;
+    esac
 }
 
 # === Run ===
