@@ -1,5 +1,6 @@
 Universal Compile For Openwrt/Immortalwrt/Openwrt-ipq
 ---
+https://github.com/user-attachments/assets/6c979ef0-2563-4f9a-856b-50fd93d7746e
 ![Image](https://github.com/user-attachments/assets/f67d0f8a-c712-4586-8342-6e99ff125e06)
 ---
 
