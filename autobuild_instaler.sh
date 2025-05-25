@@ -19,14 +19,12 @@ show_banner() {
         sleep 0.01
     done
     echo -e "\n"
-
     # Garis animasi horizontal (simulasi loading)
     for i in $(seq 1 60); do
         echo -ne "${BLUE}=${NC}"
         sleep 0.005
     done
     echo -e "\n"
-
     # ASCII Banner dengan warna biru
     echo -e "${BLUE}"
     cat << "EOF"
@@ -54,8 +52,9 @@ EOF
     echo -e "\n"
 
     # Informasi branding
-    echo -e "✨ ${BLUE}Arcadyan Firmware Modding Project${NC}"
+    echo "========================================================="
     echo -e "📦 ${BLUE}Universal OpenWrt/ImmortalWrt/OpenWrt-IPQ Builder${NC}"
+    echo "========================================================="
     echo -e "👤 ${BLUE}Author   : Pakalolo Waraso${NC}"
     echo -e "🌐 ${BLUE}GitHub   : https://github.com/BootLoopLover${NC}"
     echo -e "💬 ${BLUE}Telegram : t.me/PakaloloWaras0${NC}"
