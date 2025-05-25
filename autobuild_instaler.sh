@@ -30,7 +30,7 @@ select_distro() {
         1) git_url="https://github.com/openwrt/openwrt";;
         2) git_url="https://github.com/qosmio/openwrt-ipq";;
         3) git_url="https://github.com/immortalwrt/immortalwrt";;
-        *) echo -e "${RED}Invalid selection.${NC}"; exit 1;;
+        *) echo -e "${RED}❌ Invalid selection.${NC}"; exit 1;;
     esac
 }
 
@@ -118,10 +118,8 @@ start_build() {
 }
 
 fresh_build() {
-    read -p "📁 Masukkan nama folder build (ketik manual / pilih angka): " folder_name
-    if [[ -z "$folder_name" ]]; then
-        folder_name="openwrt_build"
-    fi
+    read -p "📁 Masukkan nama folder build (default: openwrt_build): " folder_name
+    folder_name="${folder_name:-openwrt_build}"
     mkdir -p "$folder_name" || { echo -e "${RED}❌ Failed to create folder.${NC}"; exit 1; }
     cd "$folder_name" || exit 1
 
