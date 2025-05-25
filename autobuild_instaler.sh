@@ -127,7 +127,6 @@ fresh_build() {
     git clone "$git_url" . || { echo -e "${RED}❌ Git clone failed.${NC}"; exit 1; }
     checkout_tag
     add_feeds
-    update_feeds
     clone_preset
     [[ ! -f .config ]] && make menuconfig
     start_build
