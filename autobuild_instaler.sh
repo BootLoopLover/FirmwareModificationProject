@@ -70,7 +70,7 @@ add_feeds() {
 
 use_preset_menu() {
     echo -e "${BLUE}Use preset configuration files?${NC}"
-    echo "1) ✅ Yes (use preset)"
+    echo "1) ✅ Yes (private use only)"
     echo "2) ❌ No (manual setup)"
     read -p "📌 Choice [1-2]: " preset_answer
 
