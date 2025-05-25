@@ -12,15 +12,22 @@ NC='\033[0m'
 
 show_banner() {
     clear
-    # Efek ketikan
-    message="🚀 Starting Universal OpenWrt Builder by Pakalolo Waraso..."
+    # Efek ketikan awal
+    message="🚀 Launching Arcadyan Firmware Project by Pakalolo Waraso..."
     for ((i=0; i<${#message}; i++)); do
         echo -ne "${YELLOW}${message:$i:1}${NC}"
-        sleep 0.02
+        sleep 0.01
     done
     echo -e "\n"
 
-    # Tampilkan ASCII banner dengan warna biru
+    # Garis animasi horizontal (simulasi loading)
+    for i in $(seq 1 60); do
+        echo -ne "${BLUE}=${NC}"
+        sleep 0.005
+    done
+    echo -e "\n"
+
+    # ASCII Banner dengan warna biru
     echo -e "${BLUE}"
     cat << "EOF"
    ___                   __                 
@@ -35,20 +42,25 @@ show_banner() {
   / _ \_______    (_)__ ____/ /_       
  / ___/ __/ _ \  / / -_) __/ __/  _ _ _ 
 /_/  /_/  \___/_/ /\__/\__/\__/  (_|_|_)
-             |___/                                                                
+             |___/ 
 EOF
     echo -e "${NC}"
 
-    # Info proyek
-    echo "========================================================="
-    echo -e "🛠️  ${BLUE}Universal Compile OpenWrt/ImmortalWrt/OpenWrt-IPQ${NC}"
-    echo "========================================================="
+    # Garis animasi horizontal kedua
+    for i in $(seq 1 60); do
+        echo -ne "${BLUE}-${NC}"
+        sleep 0.005
+    done
+    echo -e "\n"
+
+    # Informasi branding
+    echo -e "✨ ${BLUE}Arcadyan Firmware Modding Project${NC}"
+    echo -e "📦 ${BLUE}Universal OpenWrt/ImmortalWrt/OpenWrt-IPQ Builder${NC}"
     echo -e "👤 ${BLUE}Author   : Pakalolo Waraso${NC}"
     echo -e "🌐 ${BLUE}GitHub   : https://github.com/BootLoopLover${NC}"
     echo -e "💬 ${BLUE}Telegram : t.me/PakaloloWaras0${NC}"
     echo "========================================================="
 }
-
 
 select_distro() {
     echo -e "${BLUE}Select OpenWrt source:${NC}"
