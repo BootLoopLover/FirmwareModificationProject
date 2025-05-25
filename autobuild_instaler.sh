@@ -63,15 +63,6 @@ add_feeds() {
     esac
 }
 
-update_feeds() {
-    echo -e "${BLUE}🔄 Updating and installing feeds...${NC}"
-    ./scripts/feeds update -a && ./scripts/feeds install -a
-    if [[ $? -ne 0 ]]; then
-        echo -e "${RED}❌ Feed update/install failed!${NC}"
-        exit 1
-    fi
-}
-
 clone_preset() {
     [[ ! -d "../preset" ]] && {
         echo -e "${BLUE}Cloning preset repository...${NC}"
