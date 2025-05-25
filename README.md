@@ -10,15 +10,11 @@ Universal Compile For Openwrt/Immortalwrt/Openwrt-ipq
 #Open Terminal
 -run this command below
 -------
-#Fresh build
+#Fresh build & Rebuild
 ```
 wget https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/main/autobuild_instaler.sh && chmod +x autobuild_instaler.sh && ./autobuild_instaler.sh
 ```
 
-#Rebuild 
-```
-wget https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/main/rebuild.sh && chmod +x rebuild.sh && ./rebuild.sh
-```
 
 ---
 
