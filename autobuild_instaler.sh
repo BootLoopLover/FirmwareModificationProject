@@ -12,7 +12,34 @@ NC='\033[0m'
 
 show_banner() {
     clear
-    echo -e "✨ ${BLUE}Firmware Modifications Project${NC}"
+    # Efek ketikan
+    message="🚀 Starting Universal OpenWrt Builder by Pakalolo Waraso..."
+    for ((i=0; i<${#message}; i++)); do
+        echo -ne "${YELLOW}${message:$i:1}${NC}"
+        sleep 0.02
+    done
+    echo -e "\n"
+
+    # Tampilkan ASCII banner dengan warna biru
+    echo -e "${BLUE}"
+    cat << "EOF"
+   ___                   __                 
+  / _ | ___________ ____/ /_ _____ ____   
+ / __ |/ __/ __/ _ `/ _  / // / _ `/ _ \  
+/_/ |_/_/  \__/\_,_/\_,_/\_, /\_,_/_//_/ 
+   _____                /___/     
+  / __(_)_____ _ _    _____ ________ 
+ / _// / __/  ' \ |/|/ / _ `/ __/ -_)
+/_/ /_/_/ /_/_/_/__,__/\_,_/_/  \__/            
+   ___             _         __        
+  / _ \_______    (_)__ ____/ /_       
+ / ___/ __/ _ \  / / -_) __/ __/  _ _ _ 
+/_/  /_/  \___/_/ /\__/\__/\__/  (_|_|_)
+             |___/                                                                
+EOF
+    echo -e "${NC}"
+
+    # Info proyek
     echo "========================================================="
     echo -e "🛠️  ${BLUE}Universal Compile OpenWrt/ImmortalWrt/OpenWrt-IPQ${NC}"
     echo "========================================================="
@@ -21,6 +48,7 @@ show_banner() {
     echo -e "💬 ${BLUE}Telegram : t.me/PakaloloWaras0${NC}"
     echo "========================================================="
 }
+
 
 select_distro() {
     echo -e "${BLUE}Select OpenWrt source:${NC}"
