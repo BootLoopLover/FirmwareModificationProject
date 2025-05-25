@@ -63,6 +63,15 @@ add_feeds() {
     esac
 }
 
+update_feeds() {
+    echo -e "${BLUE}🔄 Updating and installing feeds...${NC}"
+    ./scripts/feeds update -a && ./scripts/feeds install -a
+    if [[ $? -ne 0 ]]; then
+        echo -e "${RED}❌ Feed update/install failed!${NC}"
+        exit 1
+    fi
+}
+
 clone_preset() {
     [[ ! -d "../preset" ]] && {
         echo -e "${BLUE}Cloning preset repository...${NC}"
@@ -92,8 +101,8 @@ build_action_menu() {
     echo "6) ❌ Exit"
     read -p "📌 Choice [1-6]: " choice
     case "$choice" in
-        1) ./scripts/feeds update -a && ./scripts/feeds install -a ;;
-        2) ./scripts/feeds update -a && ./scripts/feeds install -a; make menuconfig ;;
+        1) update_feeds ;;
+        2) update_feeds; make menuconfig ;;
         3) make menuconfig ;;
         4) return 0 ;;
         5) cd ..; return 1 ;;
@@ -127,7 +136,7 @@ fresh_build() {
     git clone "$git_url" . || { echo -e "${RED}❌ Git clone failed.${NC}"; exit 1; }
     checkout_tag
     add_feeds
-    ./scripts/feeds update -a && ./scripts/feeds install -a
+    update_feeds
     clone_preset
     [[ ! -f .config ]] && make menuconfig
     start_build
