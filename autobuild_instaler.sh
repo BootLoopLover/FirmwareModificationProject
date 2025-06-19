@@ -46,7 +46,7 @@ EOF
     echo -e "\n"
 
     echo "========================================================="
-    echo -e "📦 ${BLUE}Universal OpenWrt/ImmortalWrt/OpenWrt-IPQ Builder${NC}"
+    echo -e "📦 ${BLUE}Universal OpenWrt/ImmortalWrt/OpenWrt-IPQ/LEDE Builder${NC}"
     echo "========================================================="
     echo -e "👤 ${BLUE}Author   : Pakalolo Waraso${NC}"
     echo -e "🌐 ${BLUE}GitHub   : https://github.com/BootLoopLover${NC}"
