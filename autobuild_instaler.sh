@@ -172,13 +172,29 @@ start_build() {
 }
 
 fresh_build() {
-    read -p "📁 Masukkan nama folder build (default: openwrt_build): " folder_name
-    folder_name="${folder_name:-openwrt_build}"
+    echo -e "\n📁 Pilih nama folder build:"
+    options=("openwrt" "immortalwrt" "openwrt-ipq" "Custom (masukkan sendiri)")
+    select folder_option in "${options[@]}"; do
+        case $REPLY in
+            1|2|3)
+                folder_name="$folder_option"
+                break
+                ;;
+            4)
+                read -p "Masukkan nama folder build kustom: " custom_name
+                folder_name="${custom_name:-custom_build}"
+                break
+                ;;
+            *)
+                echo -e "${RED}❌ Pilihan tidak valid.${NC}"
+                ;;
+        esac
+    done
+
     mkdir -p "$folder_name" || { echo -e "${RED}❌ Gagal membuat folder.${NC}"; exit 1; }
     cd "$folder_name" || exit 1
 
     select_distro
-
     echo -e "🔗 Cloning dari: $git_url"
     git clone "$git_url" . || { echo -e "${RED}❌ Git clone gagal.${NC}"; exit 1; }
 
@@ -188,6 +204,7 @@ fresh_build() {
     use_preset_menu
     start_build
 }
+
 
 rebuild_mode() {
     while true; do
