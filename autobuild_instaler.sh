@@ -194,19 +194,20 @@ fresh_build() {
             4)
                 read -p "Masukkan nama folder build kustom: " custom_name
                 folder_name="${custom_name:-custom_build}"
-                select_distro  # hanya kalau custom
+                select_distro  # hanya digunakan jika custom
                 break
                 ;;
             *)
-                echo -e "${RED}❌ Pilihan tidak valid.${NC}"
+                echo -e "${RED}❌ Pilihan tidak valid. Sila pilih antara 1-4.${NC}"
                 ;;
         esac
     done
 
+    echo -e "\n📂 Membuat folder build: ${YELLOW}$folder_name${NC}"
     mkdir -p "$folder_name" || { echo -e "${RED}❌ Gagal membuat folder.${NC}"; exit 1; }
     cd "$folder_name" || exit 1
 
-    echo -e "🔗 Cloning dari: $git_url"
+    echo -e "🔗 Cloning dari: ${GREEN}$git_url${NC}"
     git clone "$git_url" . || { echo -e "${RED}❌ Git clone gagal.${NC}"; exit 1; }
 
     checkout_tag
@@ -215,8 +216,6 @@ fresh_build() {
     use_preset_menu
     start_build
 }
-
-
 
 rebuild_mode() {
     while true; do
