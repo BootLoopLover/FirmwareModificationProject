@@ -79,7 +79,10 @@ checkout_tag() {
             echo "$((i+1))) ${tag_list[$i]}"
         done
         read -p "🔖 Pilih tag [1-${#tag_list[@]}], Enter untuk skip: " tag_index
-        [[ -n "$tag_index" ]] && git checkout "${tag_list[$((tag_index-1))]}"
+        if [[ -n "$tag_index" ]]; then
+            checked_out_tag="${tag_list[$((tag_index-1))]}"
+            git checkout "$checked_out_tag"
+        fi
     fi
 }
 
