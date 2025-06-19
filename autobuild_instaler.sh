@@ -177,7 +177,7 @@ fresh_build() {
     printf "2) %-20s 4) %s\n" "immortalwrt"   "Custom (masukkan sendiri)"
 
     while true; do
-        read -p "Pilih folder" choice
+        read -p "📌 Choice [1-4]: " choice
         case "$choice" in
             1)
                 folder_name="openwrt"
@@ -195,7 +195,7 @@ fresh_build() {
                 break
                 ;;
             4)
-                read -p "Masukkan nama folder build kustom: " custom_name
+                read -p "Custom folder: " custom_name
                 folder_name="${custom_name:-custom_build}"
                 select_distro
                 break
@@ -251,7 +251,7 @@ main_menu() {
     show_banner
     echo "1️⃣ Fresh build (baru)"
     echo "2️⃣ Rebuild existing folder"
-    echo "3️⃣ ❌ Exit"
+    echo "3️⃣ Exit"
     echo "========================================================="
     read -p "📌 Select option [1-3]: " main_choice
     case "$main_choice" in
