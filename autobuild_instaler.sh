@@ -176,13 +176,25 @@ fresh_build() {
     options=("openwrt" "immortalwrt" "openwrt-ipq" "Custom (masukkan sendiri)")
     select folder_option in "${options[@]}"; do
         case $REPLY in
-            1|2|3)
-                folder_name="$folder_option"
+            1)
+                folder_name="openwrt"
+                git_url="https://github.com/openwrt/openwrt"
+                break
+                ;;
+            2)
+                folder_name="immortalwrt"
+                git_url="https://github.com/immortalwrt/immortalwrt"
+                break
+                ;;
+            3)
+                folder_name="openwrt-ipq"
+                git_url="https://github.com/qosmio/openwrt-ipq"
                 break
                 ;;
             4)
                 read -p "Masukkan nama folder build kustom: " custom_name
                 folder_name="${custom_name:-custom_build}"
+                select_distro  # hanya kalau custom
                 break
                 ;;
             *)
@@ -194,7 +206,6 @@ fresh_build() {
     mkdir -p "$folder_name" || { echo -e "${RED}❌ Gagal membuat folder.${NC}"; exit 1; }
     cd "$folder_name" || exit 1
 
-    select_distro
     echo -e "🔗 Cloning dari: $git_url"
     git clone "$git_url" . || { echo -e "${RED}❌ Git clone gagal.${NC}"; exit 1; }
 
@@ -204,6 +215,7 @@ fresh_build() {
     use_preset_menu
     start_build
 }
+
 
 
 rebuild_mode() {
