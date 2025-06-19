@@ -55,7 +55,7 @@ EOF
     echo "========================================================="
     echo -e "📦 ${BLUE}Universal OpenWrt/ImmortalWrt/OpenWrt-IPQ Builder${NC}"
     echo "========================================================="
-    echo -e "👤 ${BLUE}Author   : Sopek Semprit${NC}"
+    echo -e "👤 ${BLUE}Author   : Pakalolo Waraso${NC}"
     echo -e "🌐 ${BLUE}GitHub   : https://github.com/BootLoopLover${NC}"
     echo -e "💬 ${BLUE}Telegram : t.me/PakaloloWaras0${NC}"
     echo "========================================================="
