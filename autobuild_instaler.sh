@@ -4,28 +4,25 @@
 # 👨‍💻 Author: Pakalolo Waraso
 #--------------------------------------------------------
 
+# === Warna Terminal ===
 BLUE='\033[1;34m'
 GREEN='\033[1;32m'
 YELLOW='\033[1;33m'
 RED='\033[1;31m'
 NC='\033[0m'
 
+# === Banner Branding ===
 show_banner() {
     clear
-    # Efek ketikan awal
     message="🚀 Launching Arcadyan Firmware Project by Pakalolo Waraso..."
     for ((i=0; i<${#message}; i++)); do
         echo -ne "${YELLOW}${message:$i:1}${NC}"
         sleep 0.01
     done
     echo -e "\n"
-    # Garis animasi horizontal (simulasi loading)
-    for i in $(seq 1 60); do
-        echo -ne "${BLUE}=${NC}"
-        sleep 0.005
-    done
+    for i in $(seq 1 60); do echo -ne "${BLUE}=${NC}"; sleep 0.005; done
     echo -e "\n"
-    # ASCII Banner dengan warna biru
+
     echo -e "${BLUE}"
     cat << "EOF"
    ___                   __                 
@@ -43,15 +40,9 @@ show_banner() {
              |___/ 
 EOF
     echo -e "${NC}"
-
-    # Garis animasi horizontal kedua
-    for i in $(seq 1 60); do
-        echo -ne "${BLUE}-${NC}"
-        sleep 0.005
-    done
+    for i in $(seq 1 60); do echo -ne "${BLUE}-${NC}"; sleep 0.005; done
     echo -e "\n"
 
-    # Informasi branding
     echo "========================================================="
     echo -e "📦 ${BLUE}Universal OpenWrt/ImmortalWrt/OpenWrt-IPQ Builder${NC}"
     echo "========================================================="
@@ -61,6 +52,7 @@ EOF
     echo "========================================================="
 }
 
+# === Menu Pilih Distro (Git URL) ===
 select_distro() {
     echo -e "${BLUE}Select OpenWrt source:${NC}"
     echo "1) openwrt"
@@ -76,6 +68,7 @@ select_distro() {
     esac
 }
 
+# === Checkout Tag dari Git ===
 checkout_tag() {
     echo -e "${YELLOW}Fetching git tags...${NC}"
     mapfile -t tag_list < <(git tag -l | sort -Vr)
@@ -90,6 +83,7 @@ checkout_tag() {
     fi
 }
 
+# === Tambahkan Feed Tambahan ===
 add_feeds() {
     echo -e "${BLUE}Select additional feeds to include:${NC}"
     echo "1) ❌ None"
@@ -105,8 +99,12 @@ add_feeds() {
             echo "src-git custom https://github.com/BootLoopLover/custom-package" >> feeds.conf.default
             echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package" >> feeds.conf.default ;;
     esac
+
+    echo -e "${GREEN}🔄 Updating and installing feeds...${NC}"
+    ./scripts/feeds update -a && ./scripts/feeds install -a
 }
 
+# === Gunakan Preset Config dari Repository ===
 use_preset_menu() {
     echo -e "${BLUE}Use preset configuration files?${NC}"
     echo "1) ✅ Yes (private use only)"
@@ -135,6 +133,7 @@ use_preset_menu() {
     fi
 }
 
+# === Menu Tindakan Build ===
 build_action_menu() {
     echo -e "\n📋 ${BLUE}Select action:${NC}"
     echo "1) 🔄 Update feeds only"
@@ -157,6 +156,7 @@ build_action_menu() {
     return 1
 }
 
+# === Proses Build ===
 start_build() {
     echo -e "${GREEN}🚀 Starting build...${NC}"
     start_time=$(date +%s)
@@ -171,6 +171,7 @@ start_build() {
     echo -e "${BLUE}⏱️ Build completed in $((elapsed / 60)) minute(s) and $((elapsed % 60)) second(s).${NC}"
 }
 
+# === Fresh Build Mode ===
 fresh_build() {
     echo -e "\n📁 Pilih nama folder build:"
     printf "1) %-20s 3) %s\n" "openwrt"       "openwrt-ipq"
@@ -179,31 +180,17 @@ fresh_build() {
     while true; do
         read -p "📌 Choice [1-4]: " choice
         case "$choice" in
-            1)
-                folder_name="openwrt"
-                git_url="https://github.com/openwrt/openwrt"
-                break
-                ;;
-            2)
-                folder_name="immortalwrt"
-                git_url="https://github.com/immortalwrt/immortalwrt"
-                break
-                ;;
-            3)
-                folder_name="openwrt-ipq"
-                git_url="https://github.com/qosmio/openwrt-ipq"
-                break
-                ;;
-            4)
+            1) folder_name="openwrt";       git_url="https://github.com/openwrt/openwrt";;
+            2) folder_name="immortalwrt";   git_url="https://github.com/immortalwrt/immortalwrt";;
+            3) folder_name="openwrt-ipq";   git_url="https://github.com/qosmio/openwrt-ipq";;
+            4) 
                 read -p "Custom folder: " custom_name
                 folder_name="${custom_name:-custom_build}"
                 select_distro
-                break
                 ;;
-            *)
-                echo -e "${RED}❌ Pilihan tidak valid. Masukkan angka 1-4.${NC}"
-                ;;
+            *) echo -e "${RED}❌ Pilihan tidak valid. Masukkan angka 1-4.${NC}"; continue ;;
         esac
+        break
     done
 
     echo -e "\n📂 Folder dipilih : ${YELLOW}$folder_name${NC}"
@@ -220,8 +207,7 @@ fresh_build() {
     start_build
 }
 
-
-
+# === Rebuild Mode ===
 rebuild_mode() {
     while true; do
         show_banner
@@ -247,6 +233,7 @@ rebuild_mode() {
     done
 }
 
+# === Main Menu ===
 main_menu() {
     show_banner
     echo "1️⃣ Fresh build (baru)"
@@ -262,5 +249,5 @@ main_menu() {
     esac
 }
 
-# === Run ===
+# === Mulai Program ===
 main_menu
