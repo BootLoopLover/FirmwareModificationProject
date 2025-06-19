@@ -84,9 +84,11 @@ checkout_tag() {
 }
 
 add_feeds() {
+    # Pastikan luci feed selalu tersedia
     if ! grep -q "src-git luci" feeds.conf.default 2>/dev/null; then
         echo "src-git luci https://github.com/openwrt/luci" >> feeds.conf.default
     fi
+
     echo -e "${BLUE}Pilih feed tambahan:${NC}"
     printf "1) ❌  %-25s\n" "Tanpa feed tambahan"
     printf "2) 🧪  %-25s\n" "Custom Feed (BootLoopLover)"
@@ -94,16 +96,36 @@ add_feeds() {
     printf "4) 🌐  %-25s\n" "Custom + PHP7"
     echo "========================================================="
     read -p "🔹 Pilih [1-4]: " feed_choice
+
+    # Simpan hash awal sebelum perubahan
+    old_sum=$(md5sum feeds.conf.default | awk '{print $1}')
+
     case "$feed_choice" in
-        2) echo "src-git custom https://github.com/BootLoopLover/custom-package" >> feeds.conf.default ;;
-        3) echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package" >> feeds.conf.default ;;
+        2)
+            echo "src-git custom https://github.com/BootLoopLover/custom-package" >> feeds.conf.default
+            ;;
+        3)
+            echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package" >> feeds.conf.default
+            ;;
         4)
             echo "src-git custom https://github.com/BootLoopLover/custom-package" >> feeds.conf.default
-            echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package" >> feeds.conf.default ;;
+            echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package" >> feeds.conf.default
+            ;;
+        1) ;; # Tidak menambah feed
+        *) echo -e "${RED}❌ Pilihan tidak valid.${NC}"; exit 1 ;;
     esac
-    echo -e "${GREEN}🔄 Updating feeds...${NC}"
+
+    # Hitung hash baru dan update feeds jika berubah
+    new_sum=$(md5sum feeds.conf.default | awk '{print $1}')
+    if [[ "$old_sum" != "$new_sum" ]]; then
+        echo -e "${GREEN}🔄 Feeds berubah, melakukan update...${NC}"
+    else
+        echo -e "${YELLOW}ℹ️ Tidak ada feed tambahan. Tetap update untuk jaga-jaga...${NC}"
+    fi
+
     ./scripts/feeds update -a && ./scripts/feeds install -a
 }
+
 
 # === Preset Config Menu ===
 use_preset_menu() {
