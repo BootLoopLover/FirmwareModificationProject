@@ -157,7 +157,7 @@ add_feeds() {
 use_preset_menu() {
     echo -e "${BLUE}Gunakan preset config?${NC}"
     echo "1) ✅ Ya (rekomendasi)"
-    echo "2) ❌ Tidak (manual config)"
+    echo "2) ❌ Tidak (manual tick config)"
     read -p "🔹 Pilihan [1-2]: " preset_answer
 
     if [[ "$preset_answer" == "1" ]]; then
@@ -234,7 +234,7 @@ start_build() {
 # === Fresh Build ===
 fresh_build() {
     echo -e "\n📁 Pilih folder build baru:"
-    printf "1) %-20s 3) %s\n" "openwrt"       "openwrt-ipq"
+    printf "1) %-20s 3) %s\n" "openwrt"       "openwrt-ipq (qosmio)"
     printf "2) %-20s 4) %s\n" "immortalwrt"   "lede (coolsnowwolf)"
 
     while true; do
