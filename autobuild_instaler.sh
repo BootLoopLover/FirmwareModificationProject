@@ -85,6 +85,11 @@ checkout_tag() {
 
 # === Tambahkan Feed Tambahan ===
 add_feeds() {
+    # Pastikan feed luci ada supaya paket luci-app tersedia
+    if ! grep -q "src-git luci" feeds.conf.default 2>/dev/null; then
+        echo "src-git luci https://github.com/openwrt/luci" >> feeds.conf.default
+    fi
+
     echo -e "${BLUE}Select additional feeds to include:${NC}"
     echo "1) ❌ None"
     echo "2) 🧪 Custom Feed"
@@ -101,7 +106,8 @@ add_feeds() {
     esac
 
     echo -e "${GREEN}🔄 Updating and installing feeds...${NC}"
-    ./scripts/feeds update -a && ./scripts/feeds install -a
+    ./scripts/feeds update -a
+    ./scripts/feeds install -a
 }
 
 # === Gunakan Preset Config dari Repository ===
@@ -160,11 +166,11 @@ build_action_menu() {
 start_build() {
     echo -e "${GREEN}🚀 Starting build...${NC}"
     start_time=$(date +%s)
-    if make -j$(nproc); then
+    if make -j$(nproc) > build.log 2>&1; then
         echo -e "${GREEN}✅ Build success!${NC}"
     else
-        echo -e "${RED}⚠️ Build failed, retrying...${NC}"
-        make -j1 V=s
+        echo -e "${RED}⚠️ Build failed, retrying with verbose output...${NC}"
+        make -j1 V=s | tee build-error.log
     fi
     end_time=$(date +%s)
     elapsed=$((end_time - start_time))
@@ -202,8 +208,15 @@ fresh_build() {
 
     checkout_tag
     add_feeds
-    ./scripts/feeds update -a && ./scripts/feeds install -a
+
     use_preset_menu
+
+    # Validasi target board di .config
+    if ! grep -q "^CONFIG_TARGET" .config 2>/dev/null; then
+        echo -e "${RED}❌ Target board belum dipilih di .config. Jalankan menuconfig dulu.${NC}"
+        make menuconfig
+    fi
+
     start_build
 }
 
