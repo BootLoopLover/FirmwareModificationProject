@@ -281,7 +281,7 @@ rebuild_mode() {
         for i in "${!folders[@]}"; do
             echo "$((i+1))) ${folders[$i]##*/}"
         done
-        echo "0) ❌ Exit"
+        echo "0) Exit"
         read -p "🔹 Pilihan [0-${#folders[@]}]: " choice
         if [[ "$choice" == 0 ]]; then
             echo -e "${GREEN}🙋 Keluar.${NC}"; exit 0
