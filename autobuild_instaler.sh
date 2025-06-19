@@ -113,14 +113,28 @@ use_preset_menu() {
     read -p "🔹 Pilihan [1-2]: " preset_answer
 
     if [[ "$preset_answer" == "1" ]]; then
-        [[ ! -d "../preset" ]] && git clone "https://github.com/BootLoopLover/preset.git" "../preset" || {
-            echo -e "${RED}❌ Gagal clone preset.${NC}"; exit 1;
-        }
-        echo -e "${BLUE}Preset tersedia:${NC}"
+        if [[ ! -d "../preset" ]]; then
+            echo -e "${YELLOW}📦 Meng-clone preset config...${NC}"
+            if ! git clone "https://github.com/BootLoopLover/preset.git" "../preset"; then
+                echo -e "${RED}❌ Gagal clone preset. Lanjutkan manual config.${NC}"
+                make menuconfig
+                return
+            fi
+        fi
+
+        echo -e "${BLUE}📂 Preset tersedia:${NC}"
         mapfile -t folders < <(find ../preset -mindepth 1 -maxdepth 1 -type d -exec basename {} \;)
+        
+        if [[ ${#folders[@]} -eq 0 ]]; then
+            echo -e "${RED}❌ Tidak ada folder preset ditemukan. Lanjut manual config.${NC}"
+            make menuconfig
+            return
+        fi
+
         for i in "${!folders[@]}"; do
             echo "$((i+1))) ${folders[$i]}"
         done
+
         read -p "🔹 Pilih folder preset [1-${#folders[@]}]: " preset_choice
         selected_folder="../preset/${folders[$((preset_choice-1))]}"
         cp -rf "$selected_folder"/* ./
@@ -129,6 +143,7 @@ use_preset_menu() {
         [[ ! -f .config ]] && make menuconfig
     fi
 }
+
 
 # === Build Menu & Execution ===
 build_action_menu() {
