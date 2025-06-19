@@ -177,7 +177,7 @@ fresh_build() {
     printf "2) %-20s 4) %s\n" "immortalwrt"   "Custom (masukkan sendiri)"
 
     while true; do
-        read -p "#? " choice
+        read -p "Pilih folder " choice
         case "$choice" in
             1)
                 folder_name="openwrt"
