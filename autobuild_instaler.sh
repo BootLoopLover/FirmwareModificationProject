@@ -54,6 +54,27 @@ EOF
     echo "========================================================="
 }
 
+# === Tambahan Fungsi Patch LEDE ===
+apply_lede_patch() {
+    echo -e "${YELLOW}🔧 Applying LEDE-specific patch...${NC}"
+    if [ -d "target/linux/qualcommax" ]; then
+        if [ -f "target/linux/qualcommax/patches-6.6/0400-mtd-rawnand-add-support-for-TH58NYG3S0HBAI4.patch" ]; then
+            mkdir -p target/linux/qualcommax/patches-6.1/
+            if cp -v target/linux/qualcommax/patches-6.6/0400-mtd-rawnand-add-support-for-TH58NYG3S0HBAI4.patch \
+                   target/linux/qualcommax/patches-6.1/0400-mtd-rawnand-add-support-for-TH58NYG3S0HBAI4.patch; then
+                echo -e "${GREEN}✅ Patch copied successfully${NC}"
+            else
+                echo -e "${RED}❌ Failed to copy patch${NC}"
+            fi
+        else
+            echo -e "${YELLOW}⚠️ Patch file tidak ditemukan, dilewati${NC}"
+        fi
+    else
+        echo -e "${YELLOW}⚠️ Folder target/linux/qualcommax tidak ditemukan, patch dilewati${NC}"
+    fi
+}
+
+
 select_distro() {
     echo -e "${BLUE}Pilih sumber OpenWrt:${NC}"
     printf "1) 🏳️  %-15s\n" "openwrt"
@@ -212,18 +233,15 @@ start_build() {
 fresh_build() {
     echo -e "\n📁 Pilih folder build baru:"
     printf "1) %-20s 3) %s\n" "openwrt"       "openwrt-ipq"
-    printf "2) %-20s 4) %s\n" "immortalwrt"   "Custom (masukkan sendiri)"
+    printf "2) %-20s 4) %s\n" "immortalwrt"   "lede (coolsnowwolf)"
 
     while true; do
-        read -p "🔹 Pilihan [1-4]: " choice
+        read -p "🔹 Pilihan [1-5]: " choice
         case "$choice" in
             1) folder_name="openwrt";       git_url="https://github.com/openwrt/openwrt";;
             2) folder_name="immortalwrt";   git_url="https://github.com/immortalwrt/immortalwrt";;
             3) folder_name="openwrt-ipq";   git_url="https://github.com/qosmio/openwrt-ipq";;
-            4) 
-                read -p "Nama folder custom: " custom_name
-                folder_name="${custom_name:-custom_build}"
-                select_distro;;
+            4) folder_name="lede";   git_url="https://github.com/coolsnowwolf/lede.git";;
             *) echo -e "${RED}❌ Pilihan tidak valid.${NC}"; continue;;
         esac
         break
@@ -234,6 +252,8 @@ fresh_build() {
 
     echo -e "🔗 Clone dari: ${GREEN}$git_url${NC}"
     git clone "$git_url" . || { echo -e "${RED}❌ Gagal clone repo.${NC}"; exit 1; }
+
+    [[ "$git_url" == *"coolsnowwolf/lede"* ]] && apply_lede_patch
 
     echo -e "${GREEN}🔄 Menjalankan update & install feeds awal...${NC}"
     ./scripts/feeds update -a && ./scripts/feeds install -a
