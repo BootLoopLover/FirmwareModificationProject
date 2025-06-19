@@ -164,9 +164,9 @@ build_action_menu() {
 
 # === Proses Build ===
 start_build() {
-    echo -e "${GREEN}🚀 Starting build...${NC}"
+    echo -e "${GREEN}🚀 Starting build with 20 threads...${NC}"
     start_time=$(date +%s)
-    if make -j$(nproc) > build.log 2>&1; then
+    if make -j20 > build.log 2>&1; then
         echo -e "${GREEN}✅ Build success!${NC}"
     else
         echo -e "${RED}⚠️ Build failed, retrying with verbose output...${NC}"
@@ -176,6 +176,7 @@ start_build() {
     elapsed=$((end_time - start_time))
     echo -e "${BLUE}⏱️ Build completed in $((elapsed / 60)) minute(s) and $((elapsed % 60)) second(s).${NC}"
 }
+
 
 # === Fresh Build Mode ===
 fresh_build() {
