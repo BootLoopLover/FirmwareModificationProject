@@ -80,12 +80,14 @@ select_distro() {
     printf "1) 🏳️  %-15s\n" "openwrt"
     printf "2) 🔧  %-15s\n" "openwrt-ipq"
     printf "3) 💀  %-15s\n" "immortalwrt"
+    printf "4) 🏳️  %-15s\n" "lede"
     echo "========================================================="
     read -p "🔹 Pilihan [1-3]: " distro
     case "$distro" in
         1) git_url="https://github.com/openwrt/openwrt";;
         2) git_url="https://github.com/qosmio/openwrt-ipq";;
         3) git_url="https://github.com/immortalwrt/immortalwrt";;
+        4) git_url="https://github.com/coolsnowwolf/lede";;
         *) echo -e "${RED}❌ Pilihan tidak valid.${NC}"; exit 1;;
     esac
 }
