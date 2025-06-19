@@ -1,7 +1,7 @@
 #!/bin/bash
 #--------------------------------------------------------
 # 🚀 Universal OpenWrt Builder - Final Professional Version
-# 👨‍💻 Author: SopekSemprit 
+# 👨‍💻 Author: Pakalolo Waraso
 #--------------------------------------------------------
 
 BLUE='\033[1;34m'
@@ -13,7 +13,7 @@ NC='\033[0m'
 show_banner() {
     clear
     # Efek ketikan awal
-    message="🚀 Launching Arcadyan Firmware Project by Sopek Semprit..."
+    message="🚀 Launching Arcadyan Firmware Project by Pakalolo Waraso..."
     for ((i=0; i<${#message}; i++)); do
         echo -ne "${YELLOW}${message:$i:1}${NC}"
         sleep 0.01
