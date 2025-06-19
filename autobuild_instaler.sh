@@ -170,7 +170,7 @@ start_build() {
         echo -e "${GREEN}✅ Build success!${NC}"
     else
         echo -e "${RED}⚠️ Build failed, retrying with verbose output...${NC}"
-        make -j1 V=s | tee build-error.log
+        make -j20 V=s | tee build-error.log
     fi
     end_time=$(date +%s)
     elapsed=$((end_time - start_time))
