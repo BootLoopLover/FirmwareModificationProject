@@ -173,9 +173,12 @@ start_build() {
 
 fresh_build() {
     echo -e "\n📁 Pilih nama folder build:"
-    options=("openwrt" "immortalwrt" "openwrt-ipq" "Custom (masukkan sendiri)")
-    select folder_option in "${options[@]}"; do
-        case $REPLY in
+    printf "1) %-18s 3) %s\n" "openwrt"       "openwrt-ipq"
+    printf "2) %-18s 4) %s\n" "immortalwrt"   "Custom (masukkan sendiri)"
+
+    while true; do
+        read -p "#? " choice
+        case "$choice" in
             1)
                 folder_name="openwrt"
                 git_url="https://github.com/openwrt/openwrt"
@@ -194,16 +197,16 @@ fresh_build() {
             4)
                 read -p "Masukkan nama folder build kustom: " custom_name
                 folder_name="${custom_name:-custom_build}"
-                select_distro  # hanya digunakan jika custom
+                select_distro
                 break
                 ;;
             *)
-                echo -e "${RED}❌ Pilihan tidak valid. Sila pilih antara 1-4.${NC}"
+                echo -e "${RED}❌ Pilihan tidak valid. Masukkan 1-4.${NC}"
                 ;;
         esac
     done
 
-    echo -e "\n📂 Membuat folder build: ${YELLOW}$folder_name${NC}"
+    echo -e "\n📂 Folder dipilih : ${YELLOW}$folder_name${NC}"
     mkdir -p "$folder_name" || { echo -e "${RED}❌ Gagal membuat folder.${NC}"; exit 1; }
     cd "$folder_name" || exit 1
 
@@ -216,6 +219,7 @@ fresh_build() {
     use_preset_menu
     start_build
 }
+
 
 rebuild_mode() {
     while true; do
