@@ -87,10 +87,19 @@ checkout_tag() {
 }
 
 add_feeds() {
-    # Pastikan luci feed selalu tersedia
-    if ! grep -q "src-git luci" feeds.conf.default 2>/dev/null; then
-        echo "src-git luci https://github.com/openwrt/luci" >> feeds.conf.default
+    echo -e "${YELLOW}🔍 Menyesuaikan feed luci berdasarkan tag...${NC}"
+
+    luci_branch="master"
+    if [[ "$checked_out_tag" =~ ^v([0-9]+)\.([0-9]+) ]]; then
+        major="${BASH_REMATCH[1]}"
+        minor="${BASH_REMATCH[2]}"
+        luci_branch="openwrt-${major}.${minor}"
     fi
+
+    echo -e "${GREEN}✅ Feed luci akan menggunakan branch: ${luci_branch}${NC}"
+
+    # Tulis ulang feed.conf.default
+    echo "src-git luci https://github.com/openwrt/luci;$luci_branch" > feeds.conf.default
 
     echo -e "${BLUE}Pilih feed tambahan:${NC}"
     printf "1) ❌  %-25s\n" "Tanpa feed tambahan"
@@ -99,9 +108,6 @@ add_feeds() {
     printf "4) 🌐  %-25s\n" "Custom + PHP7"
     echo "========================================================="
     read -p "🔹 Pilih [1-4]: " feed_choice
-
-    # Simpan hash awal sebelum perubahan
-    old_sum=$(md5sum feeds.conf.default | awk '{print $1}')
 
     case "$feed_choice" in
         2)
@@ -118,16 +124,10 @@ add_feeds() {
         *) echo -e "${RED}❌ Pilihan tidak valid.${NC}"; exit 1 ;;
     esac
 
-    # Hitung hash baru dan update feeds jika berubah
-    new_sum=$(md5sum feeds.conf.default | awk '{print $1}')
-    if [[ "$old_sum" != "$new_sum" ]]; then
-        echo -e "${GREEN}🔄 Feeds berubah, melakukan update...${NC}"
-    else
-        echo -e "${YELLOW}ℹ️ Tidak ada feed tambahan. Tetap update untuk jaga-jaga...${NC}"
-    fi
-
+    echo -e "${GREEN}🔄 Update feeds...${NC}"
     ./scripts/feeds update -a && ./scripts/feeds install -a
 }
+
 
 
 # === Preset Config Menu ===
