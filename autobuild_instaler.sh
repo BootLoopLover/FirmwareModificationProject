@@ -1,7 +1,7 @@
 #!/bin/bash
 #--------------------------------------------------------
 # 🚀 Universal OpenWrt Builder - Final Professional Version
-# 👨‍💻 Author: Pakalolo Waraso (BootLoopLover)
+# 👨‍💻 Author: SopekSemprit 
 #--------------------------------------------------------
 
 BLUE='\033[1;34m'
@@ -13,7 +13,7 @@ NC='\033[0m'
 show_banner() {
     clear
     # Efek ketikan awal
-    message="🚀 Launching Arcadyan Firmware Project by Pakalolo Waraso..."
+    message="🚀 Launching Arcadyan Firmware Project by Sopek Semprit..."
     for ((i=0; i<${#message}; i++)); do
         echo -ne "${YELLOW}${message:$i:1}${NC}"
         sleep 0.01
@@ -55,7 +55,7 @@ EOF
     echo "========================================================="
     echo -e "📦 ${BLUE}Universal OpenWrt/ImmortalWrt/OpenWrt-IPQ Builder${NC}"
     echo "========================================================="
-    echo -e "👤 ${BLUE}Author   : Pakalolo Waraso${NC}"
+    echo -e "👤 ${BLUE}Author   : Sopek Semprit${NC}"
     echo -e "🌐 ${BLUE}GitHub   : https://github.com/BootLoopLover${NC}"
     echo -e "💬 ${BLUE}Telegram : t.me/PakaloloWaras0${NC}"
     echo "========================================================="
@@ -174,11 +174,14 @@ start_build() {
 fresh_build() {
     read -p "📁 Masukkan nama folder build (default: openwrt_build): " folder_name
     folder_name="${folder_name:-openwrt_build}"
-    mkdir -p "$folder_name" || { echo -e "${RED}❌ Failed to create folder.${NC}"; exit 1; }
+    mkdir -p "$folder_name" || { echo -e "${RED}❌ Gagal membuat folder.${NC}"; exit 1; }
     cd "$folder_name" || exit 1
 
     select_distro
-    git clone "$git_url" . || { echo -e "${RED}❌ Git clone failed.${NC}"; exit 1; }
+
+    echo -e "🔗 Cloning dari: $git_url"
+    git clone "$git_url" . || { echo -e "${RED}❌ Git clone gagal.${NC}"; exit 1; }
+
     checkout_tag
     add_feeds
     ./scripts/feeds update -a && ./scripts/feeds install -a
