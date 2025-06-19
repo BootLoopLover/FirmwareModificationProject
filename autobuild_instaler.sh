@@ -173,8 +173,8 @@ start_build() {
 
 fresh_build() {
     echo -e "\n📁 Pilih nama folder build:"
-    printf "1) %-18s 3) %s\n" "openwrt"       "openwrt-ipq"
-    printf "2) %-18s 4) %s\n" "immortalwrt"   "Custom (masukkan sendiri)"
+    printf "1) %-20s 3) %s\n" "openwrt"       "openwrt-ipq"
+    printf "2) %-20s 4) %s\n" "immortalwrt"   "Custom (masukkan sendiri)"
 
     while true; do
         read -p "#? " choice
@@ -201,7 +201,7 @@ fresh_build() {
                 break
                 ;;
             *)
-                echo -e "${RED}❌ Pilihan tidak valid. Masukkan 1-4.${NC}"
+                echo -e "${RED}❌ Pilihan tidak valid. Masukkan angka 1-4.${NC}"
                 ;;
         esac
     done
@@ -219,6 +219,7 @@ fresh_build() {
     use_preset_menu
     start_build
 }
+
 
 
 rebuild_mode() {
