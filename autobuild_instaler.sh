@@ -235,6 +235,9 @@ fresh_build() {
     echo -e "🔗 Clone dari: ${GREEN}$git_url${NC}"
     git clone "$git_url" . || { echo -e "${RED}❌ Gagal clone repo.${NC}"; exit 1; }
 
+    echo -e "${GREEN}🔄 Menjalankan update & install feeds awal...${NC}"
+    ./scripts/feeds update -a && ./scripts/feeds install -a
+
     checkout_tag
     add_feeds
     use_preset_menu
@@ -246,6 +249,7 @@ fresh_build() {
 
     start_build
 }
+
 
 rebuild_mode() {
     while true; do
