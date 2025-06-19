@@ -80,7 +80,7 @@ select_distro() {
     printf "1) 🏳️  %-15s\n" "openwrt"
     printf "2) 🔧  %-15s\n" "openwrt-ipq"
     printf "3) 💀  %-15s\n" "immortalwrt"
-    printf "4) 🏳️  %-15s\n" "lede"
+    printf "4) 🔥  %-15s\n" "lede"
     echo "========================================================="
     read -p "🔹 Pilihan [1-3]: " distro
     case "$distro" in
@@ -157,7 +157,7 @@ add_feeds() {
 use_preset_menu() {
     echo -e "${BLUE}Gunakan preset config?${NC}"
     echo "1) ✅ Ya (rekomendasi)"
-    echo "2) ❌ Tidak (manual tick config)"
+    echo "2) 🏗️ Tidak (tick menuconfig)"
     read -p "🔹 Pilihan [1-2]: " preset_answer
 
     if [[ "$preset_answer" == "1" ]]; then
