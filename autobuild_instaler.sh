@@ -24,7 +24,6 @@ show_banner() {
     echo -e "\n"
     for i in $(seq 1 60); do echo -ne "${BLUE}=${NC}"; sleep 0.005; done
     echo -e "\n"
-
     echo -e "${BLUE}"
     cat << "EOF"  
    _____                
