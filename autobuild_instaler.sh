@@ -34,6 +34,7 @@ show_banner() {
  / ___/ __/ _ \  / / -_) __/ __/  _ _ _ 
 /_/  /_/  \___/_/ /\__/\__/\__/  (_|_|_)
              |___/ © Project by Pakalolo
+             
 EOF
     echo -e "${NC}"
     for i in $(seq 1 60); do echo -ne "${BLUE}-${NC}"; sleep 0.005; done
