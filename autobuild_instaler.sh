@@ -33,7 +33,7 @@ show_banner() {
   / _ \_______    (_)__ ____/ /_       
  / ___/ __/ _ \  / / -_) __/ __/  _ _ _ 
 /_/  /_/  \___/_/ /\__/\__/\__/  (_|_|_)
-Modification |___/ © Project by Pakalolo
+             |___/ © Project by Pakalolo
              
 EOF
     echo -e "${NC}"
