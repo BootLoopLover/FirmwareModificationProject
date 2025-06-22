@@ -85,16 +85,6 @@ checkout_tag() {
 }
 
 add_feeds() {
-    echo -e "${YELLOW}🔍 Menyesuaikan feed luci berdasarkan tag...${NC}"
-    luci_branch="master"
-    if [[ "$checked_out_tag" =~ ^v([0-9]+)\.([0-9]+) ]]; then
-        major="${BASH_REMATCH[1]}"
-        minor="${BASH_REMATCH[2]}"
-        luci_branch="openwrt-${major}.${minor}"
-    fi
-    echo -e "${GREEN}✅ Feed luci akan menggunakan branch: ${luci_branch}${NC}"
-    echo "src-git luci https://github.com/openwrt/luci;$luci_branch" > feeds.conf.default
-
     echo -e "${BLUE}Pilih feed tambahan:${NC}"
     printf "1) ❌  %-25s\n" "Tanpa feed tambahan"
     printf "2) 🧪  %-25s\n" "Custom Feed (BootLoopLover)"
@@ -104,11 +94,16 @@ add_feeds() {
     read -p "🔹 Pilih [1-4]: " feed_choice
 
     case "$feed_choice" in
-        2) echo "src-git custom https://github.com/BootLoopLover/custom-package" >> feeds.conf.default ;;
-        3) echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package" >> feeds.conf.default ;;
+        2)
+            echo "src-git custom https://github.com/BootLoopLover/custom-package" >> feeds.conf.default
+            ;;
+        3)
+            echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package" >> feeds.conf.default
+            ;;
         4)
             echo "src-git custom https://github.com/BootLoopLover/custom-package" >> feeds.conf.default
-            echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package" >> feeds.conf.default ;;
+            echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package" >> feeds.conf.default
+            ;;
         1) ;; # Tidak menambah feed
         *) echo -e "${RED}❌ Pilihan tidak valid.${NC}"; exit 1 ;;
     esac
