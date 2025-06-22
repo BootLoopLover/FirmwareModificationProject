@@ -77,15 +77,32 @@ select_distro() {
     printf "3) 💀  %-15s\n" "immortalwrt"
     printf "4) 🔥  %-15s\n" "lede"
     echo "========================================================="
-    read -p "🔹 Pilihan [1-3]: " distro
+    read -p "🔹 Pilihan [1-4]: " distro
+
     case "$distro" in
-        1) git_url="https://github.com/openwrt/openwrt";;
-        2) git_url="https://github.com/qosmio/openwrt-ipq";;
-        3) git_url="https://github.com/immortalwrt/immortalwrt";;
-        4) git_url="https://github.com/coolsnowwolf/lede";;
-        *) echo -e "${RED}❌ Pilihan tidak valid.${NC}"; exit 1;;
+        1)
+            git_url="https://github.com/openwrt/openwrt"
+            branch="master"
+            ;;
+        2)
+            git_url="https://github.com/qosmio/openwrt-ipq"
+            branch="24.10-nss"
+            ;;
+        3)
+            git_url="https://github.com/immortalwrt/immortalwrt"
+            branch="master"
+            ;;
+        4)
+            git_url="https://github.com/coolsnowwolf/lede"
+            branch="master"
+            ;;
+        *)
+            echo -e "${RED}❌ Pilihan tidak valid.${NC}"
+            exit 1
+            ;;
     esac
 }
+
 
 checkout_tag() {
     echo -e "${YELLOW}🔍 Mengambil daftar git tag...${NC}"
