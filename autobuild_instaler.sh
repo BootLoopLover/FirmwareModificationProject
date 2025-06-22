@@ -34,7 +34,6 @@ show_banner() {
  / ___/ __/ _ \  / / -_) __/ __/  _ _ _ 
 /_/  /_/  \___/_/ /\__/\__/\__/  (_|_|_)
              |___/ © Project by Pakalolo
-             
 EOF
     echo -e "${NC}"
     for i in $(seq 1 60); do echo -ne "${BLUE}-${NC}"; sleep 0.005; done
@@ -49,7 +48,6 @@ EOF
     echo "========================================================="
 }
 
-# === Tambahan Fungsi Patch LEDE ===
 apply_lede_patch() {
     echo -e "${YELLOW}🔧 Applying LEDE-specific patch...${NC}"
     if [ -d "target/linux/qualcommax" ]; then
@@ -68,41 +66,6 @@ apply_lede_patch() {
         echo -e "${YELLOW}⚠️ Folder target/linux/qualcommax tidak ditemukan, patch dilewati${NC}"
     fi
 }
-
-
-select_distro() {
-    echo -e "${BLUE}Pilih sumber OpenWrt:${NC}"
-    printf "1) 🏳️  %-15s\n" "openwrt"
-    printf "2) 🔧  %-15s\n" "openwrt-ipq"
-    printf "3) 💀  %-15s\n" "immortalwrt"
-    printf "4) 🔥  %-15s\n" "lede"
-    echo "========================================================="
-    read -p "🔹 Pilihan [1-4]: " distro
-
-    case "$distro" in
-        1)
-            git_url="https://github.com/openwrt/openwrt"
-            branch="master"
-            ;;
-        2)
-            git_url="https://github.com/qosmio/openwrt-ipq"
-            branch="24.10-nss"
-            ;;
-        3)
-            git_url="https://github.com/immortalwrt/immortalwrt"
-            branch="master"
-            ;;
-        4)
-            git_url="https://github.com/coolsnowwolf/lede"
-            branch="master"
-            ;;
-        *)
-            echo -e "${RED}❌ Pilihan tidak valid.${NC}"
-            exit 1
-            ;;
-    esac
-}
-
 
 checkout_tag() {
     echo -e "${YELLOW}🔍 Mengambil daftar git tag...${NC}"
@@ -123,17 +86,13 @@ checkout_tag() {
 
 add_feeds() {
     echo -e "${YELLOW}🔍 Menyesuaikan feed luci berdasarkan tag...${NC}"
-
     luci_branch="master"
     if [[ "$checked_out_tag" =~ ^v([0-9]+)\.([0-9]+) ]]; then
         major="${BASH_REMATCH[1]}"
         minor="${BASH_REMATCH[2]}"
         luci_branch="openwrt-${major}.${minor}"
     fi
-
     echo -e "${GREEN}✅ Feed luci akan menggunakan branch: ${luci_branch}${NC}"
-
-    # Tulis ulang feed.conf.default
     echo "src-git luci https://github.com/openwrt/luci;$luci_branch" > feeds.conf.default
 
     echo -e "${BLUE}Pilih feed tambahan:${NC}"
@@ -145,16 +104,11 @@ add_feeds() {
     read -p "🔹 Pilih [1-4]: " feed_choice
 
     case "$feed_choice" in
-        2)
-            echo "src-git custom https://github.com/BootLoopLover/custom-package" >> feeds.conf.default
-            ;;
-        3)
-            echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package" >> feeds.conf.default
-            ;;
+        2) echo "src-git custom https://github.com/BootLoopLover/custom-package" >> feeds.conf.default ;;
+        3) echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package" >> feeds.conf.default ;;
         4)
             echo "src-git custom https://github.com/BootLoopLover/custom-package" >> feeds.conf.default
-            echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package" >> feeds.conf.default
-            ;;
+            echo "src-git php7 https://github.com/BootLoopLover/openwrt-php7-package" >> feeds.conf.default ;;
         1) ;; # Tidak menambah feed
         *) echo -e "${RED}❌ Pilihan tidak valid.${NC}"; exit 1 ;;
     esac
@@ -163,9 +117,6 @@ add_feeds() {
     ./scripts/feeds update -a && ./scripts/feeds install -a
 }
 
-
-
-# === Preset Config Menu ===
 use_preset_menu() {
     echo -e "${BLUE}Gunakan preset config?${NC}"
     echo "1) ✅ Ya (rekomendasi)"
@@ -181,20 +132,16 @@ use_preset_menu() {
                 return
             fi
         fi
-
         echo -e "${BLUE}📂 Preset tersedia:${NC}"
         mapfile -t folders < <(find ../preset -mindepth 1 -maxdepth 1 -type d -exec basename {} \;)
-        
         if [[ ${#folders[@]} -eq 0 ]]; then
             echo -e "${RED}❌ Tidak ada folder preset ditemukan. Lanjut manual config.${NC}"
             make menuconfig
             return
         fi
-
         for i in "${!folders[@]}"; do
             echo "$((i+1))) ${folders[$i]}"
         done
-
         read -p "🔹 Pilih folder preset [1-${#folders[@]}]: " preset_choice
         selected_folder="../preset/${folders[$((preset_choice-1))]}"
         cp -rf "$selected_folder"/* ./
@@ -204,8 +151,6 @@ use_preset_menu() {
     fi
 }
 
-
-# === Build Menu & Execution ===
 build_action_menu() {
     echo -e "\n📋 ${BLUE}Menu Build:${NC}"
     printf "1) 🔄  %-30s\n" "Update feeds saja"
@@ -243,19 +188,18 @@ start_build() {
     command -v notify-send &>/dev/null && notify-send "OpenWrt Build" "✅ Build selesai di folder: $(pwd)"
 }
 
-# === Fresh Build ===
 fresh_build() {
     echo -e "\n📁 Pilih folder build baru:"
     printf "1) %-20s 3) %s\n" "openwrt"       "openwrt-ipq (qosmio)"
     printf "2) %-20s 4) %s\n" "immortalwrt"   "lede (coolsnowwolf)"
 
     while true; do
-        read -p "🔹 Pilihan [1-5]: " choice
+        read -p "🔹 Pilihan [1-4]: " choice
         case "$choice" in
             1) folder_name="openwrt";       git_url="https://github.com/openwrt/openwrt";;
             2) folder_name="immortalwrt";   git_url="https://github.com/immortalwrt/immortalwrt";;
             3) folder_name="openwrt-ipq";   git_url="https://github.com/qosmio/openwrt-ipq";;
-            4) folder_name="lede";   git_url="https://github.com/coolsnowwolf/lede.git";;
+            4) folder_name="lede";          git_url="https://github.com/coolsnowwolf/lede.git";;
             *) echo -e "${RED}❌ Pilihan tidak valid.${NC}"; continue;;
         esac
         break
@@ -265,14 +209,18 @@ fresh_build() {
     mkdir -p "$folder_name" && cd "$folder_name" || { echo -e "${RED}❌ Gagal masuk folder.${NC}"; exit 1; }
 
     echo -e "🔗 Clone dari: ${GREEN}$git_url${NC}"
-    git clone "$git_url" . || { echo -e "${RED}❌ Gagal clone repo.${NC}"; exit 1; }
+    if [[ "$folder_name" == "openwrt-ipq" ]]; then
+        git clone https://github.com/qosmio/openwrt-ipq -b 24.10-nss . || { echo -e "${RED}❌ Gagal clone repo.${NC}"; exit 1; }
+    else
+        git clone "$git_url" . || { echo -e "${RED}❌ Gagal clone repo.${NC}"; exit 1; }
+    fi
 
-    [[ "$git_url" == *"coolsnowwolf/lede"* ]] && apply_lede_patch
+    [[ "$folder_name" == "lede" ]] && apply_lede_patch
 
     echo -e "${GREEN}🔄 Menjalankan update & install feeds awal...${NC}"
     ./scripts/feeds update -a && ./scripts/feeds install -a
 
-    checkout_tag
+    [[ "$folder_name" != "openwrt-ipq" ]] && checkout_tag
     add_feeds
     use_preset_menu
 
@@ -283,7 +231,6 @@ fresh_build() {
 
     start_build
 }
-
 
 rebuild_mode() {
     while true; do
