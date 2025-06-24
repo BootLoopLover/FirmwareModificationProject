@@ -148,12 +148,12 @@ use_preset_menu() {
 
 build_action_menu() {
     echo -e "\n📋 ${BLUE}Menu Build:${NC}"
-    printf "1) 🔄  %-30s\n" "Update feeds saja"
+    printf "1) 🔄  %-30s\n" "Update feeds"
     printf "2) 🧪  %-30s\n" "Update feeds + menuconfig"
-    printf "3) 🛠️  %-30s\n" "Jalankan menuconfig saja"
-    printf "4) 🏗️  %-30s\n" "Mulai proses build"
-    printf "5) 🔙  %-30s\n" "Kembali ke menu sebelumnya"
-    printf "6) ❌  %-30s\n" "Keluar dari skrip"
+    printf "3) 🛠️  %-30s\n" "Make menuconfig"
+    printf "4) 🏗️  %-30s\n" "Start build"
+    printf "5) 🔙  %-30s\n" "Back to main menu"
+    printf "6) ❌  %-30s\n" "Exit"
     echo "========================================================="
     read -p "🔹 Pilihan [1-6]: " choice
     case "$choice" in
@@ -253,8 +253,8 @@ rebuild_mode() {
 
 main_menu() {
     show_banner
-    echo "1️⃣ Fresh build (baru)"
-    echo "2️⃣ Rebuild dari folder lama"
+    echo "1️⃣ Fresh build"
+    echo "2️⃣ Rebuild"
     echo "3️⃣ Keluar"
     echo "========================================================="
     read -p "🔹 Pilih opsi [1-3]: " main_choice
