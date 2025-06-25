@@ -91,7 +91,7 @@ add_feeds() {
     echo -e "${BLUE}Select additional feeds:${NC}"
     printf "1) ❌  %-25s\n" "No additional feeds"
     printf "2) 🧪  %-25s\n" "Custom Feed (BootLoopLover)"
-    printf "3) 🐘  %-25s\n" "PHP7 Feed (Legacy)"
+    printf "3) 🐘  %-25s\n" "PHP7 Feed (BootLoopLover)"
     printf "4) 🌐  %-25s\n" "Custom + PHP7"
     echo "========================================================="
     read -p "🔹 Select [1-4]: " feed_choice
