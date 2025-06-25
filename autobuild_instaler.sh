@@ -169,13 +169,13 @@ build_action_menu() {
 }
 
 start_build() {
-    echo -e "${GREEN}🚀 Mulai build dengan 20 threads...${NC}"
+    echo -e "${GREEN}🚀 Starting build firmware device...${NC}"
     start_time=$(date +%s)
-    if make -j20 > build.log 2>&1; then
+    if make -j5 > build.log 2>&1; then
         echo -e "${GREEN}✅ Build berhasil!${NC}"
     else
         echo -e "${RED}⚠️ Build gagal, coba ulang dengan output verbose...${NC}"
-        make -j20 V=s | tee build-error.log
+        make -j5 V=s | tee build-error.log
     fi
     end_time=$(date +%s)
     elapsed=$((end_time - start_time))
