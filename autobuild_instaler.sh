@@ -112,7 +112,7 @@ add_feeds() {
     esac
 
     echo -e "${GREEN}🔄 Updating feeds...${NC}"
-    ./scripts/feeds update -a && ./scripts/feeds install -a
+    ./scripts/feeds update -a && ./scripts/feeds install -a -f
 }
 
 # === Preset Configuration Selection ===
