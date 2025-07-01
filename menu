@@ -1,33 +1,35 @@
 #!/bin/sh
 
-# Warna
+# Warna Terminal
 CYAN="\033[0;36m"
 BLUE="\033[1;34m"
 NC="\033[0m" # No Color
 
-
-# Branding
+# ┌────────────────────────────────────────────┐
+# │              Branding Header               │
+# └────────────────────────────────────────────┘
 show_branding() {
     printf "${CYAN}"
-    echo "   ___       __        __     __    "                   
-    echo "  / _ \___ _/ /_____ _/ /__  / /__   " 
-    echo " / ___/ _ `/  '_/ _ `/ / _ \/ / _ \  " 
+    echo "   ___       __        __     __    "
+    echo "  / _ \___ _/ /_____ _/ /__  / /__   "
+    echo " / ___/ _ \`/  '_/ _ \`/ / _ \/ / _ \  "
     echo "/_/   \_,_/_/\_\\_,_/_/\___/_/\___/  "
-    echo "  / _ \_______    (_)__ ____/ /_     "  
-    echo " / ___/ __/ _ \  / / -_) __/ __/  _ _ _ "
+    echo "  / _ \_______    (_)__ ____/ /_     "
+    echo " / ___/ __/ _ \  / / -_) __/ __/  _ _ _"
     echo "/_/  /_/  \___/_/ /\__/\__/\__/  (_|_|_)"
-    echo "             |___/ © Project by Pakalolo"
-    echo "========================================="
+    echo "             |___/  © Project by Pakalolo"
     echo "╔════════════════════════════════════════════╗"
     echo "║     🚀 FIRMWARE MODIFICATION PROJECT 🚀    ║"
     echo "╚════════════════════════════════════════════╝"
-    printf "${BLUE}👤 Author: Pakalolo Waraso${NC}\n"
+    printf "${BLUE}👤 Author        : Pakalolo Waraso${NC}\n"
     printf "${BLUE}💬 Special Thanks: Awiks Telegram Group${NC}\n"
-    printf "${BLUE}🛠️ Maintainer: https://github.com/BootLoopLover${NC}\n"
+    printf "${BLUE}🛠️  Maintainer   : https://github.com/BootLoopLover${NC}\n"
     printf "${CYAN}============================================${NC}\n"
 }
 
-# Cek dependensi dasar
+# ┌────────────────────────────────────────────┐
+# │         Cek Dependensi Dasar Sistem        │
+# └────────────────────────────────────────────┘
 check_dependencies() {
     for cmd in wget tar opkg; do
         if ! command -v "$cmd" >/dev/null 2>&1; then
@@ -37,26 +39,34 @@ check_dependencies() {
     done
 }
 
-# Pasang htop
+# ┌────────────────────────────────────────────┐
+# │              Jalankan htop                 │
+# └────────────────────────────────────────────┘
 run_htop() {
     if ! command -v htop >/dev/null 2>&1; then
         echo "📦 htop tidak ditemukan. Menginstall..."
         opkg update && opkg install htop || {
-            echo "❌ Gagal menginstall htop."; return
+            echo "❌ Gagal menginstall htop."
+            return
         }
     fi
     echo "🖥️ Menjalankan htop..."
     htop
 }
 
-# Jalankan speedtest
+# ┌────────────────────────────────────────────┐
+# │           Jalankan Speedtest               │
+# └────────────────────────────────────────────┘
 run_speedtest() {
     if ! command -v speedtest >/dev/null 2>&1; then
         echo "📦 Menginstall Ookla Speedtest CLI..."
         cd /tmp || return
         wget -O speedtest.tgz https://github.com/BootLoopLover/ookla/raw/main/ookla-speedtest-1.2.0-linux-aarch64.tgz
         if [ $? -eq 0 ]; then
-            tar -xzf speedtest.tgz -C /tmp
+            tar -xzf speedtest.tgz -C /tmp || {
+                echo "❌ Gagal mengekstrak speedtest.tgz."
+                return
+            }
             if [ -f /tmp/speedtest ]; then
                 mv /tmp/speedtest /usr/bin/speedtest
                 chmod +x /usr/bin/speedtest
@@ -71,30 +81,36 @@ run_speedtest() {
     fi
 
     [ ! -x /usr/bin/speedtest ] && chmod +x /usr/bin/speedtest
-
     echo "⚡ Menjalankan Ookla Speedtest..."
     speedtest
 }
 
-# Jalankan ping
+# ┌────────────────────────────────────────────┐
+# │               Jalankan Ping                │
+# └────────────────────────────────────────────┘
 run_ping() {
     echo "📡 Melakukan ping ke google.com..."
     ping -c 5 google.com || echo "❌ Ping gagal. Periksa koneksi internet."
 }
 
-# Jalankan vnStat
+# ┌────────────────────────────────────────────┐
+# │              Jalankan vnStat               │
+# └────────────────────────────────────────────┘
 run_vnstat() {
     if ! command -v vnstat >/dev/null 2>&1; then
         echo "📦 vnStat tidak ditemukan. Menginstall..."
         opkg update && opkg install vnstat || {
-            echo "❌ Gagal menginstall vnstat."; return
+            echo "❌ Gagal menginstall vnstat."
+            return
         }
     fi
     echo "📊 Menjalankan vnStat..."
     vnstat
 }
 
-# Menu utama
+# ┌────────────────────────────────────────────┐
+# │               Menu Utama                   │
+# └────────────────────────────────────────────┘
 main_menu() {
     while true; do
         clear
@@ -114,19 +130,31 @@ main_menu() {
         case "$choice" in
             1) run_htop ;;
             2) run_speedtest ;;
-            3) echo "🔄 Rebooting Modem AW1000..."; reboot ;;
+            3)
+                if command -v reboot >/dev/null 2>&1; then
+                    echo "🔄 Rebooting Modem AW1000..."
+                    reboot
+                else
+                    echo "❌ Perintah reboot tidak ditemukan."
+                fi
+                ;;
             4) run_ping ;;
             5) run_vnstat ;;
-            6) echo "👋 Keluar dari skrip. Sampai jumpa!"; exit 0 ;;
+            6)
+                echo "👋 Keluar dari skrip. Sampai jumpa!"
+                exit 0
+                ;;
             *) echo "⚠️ Opsi tidak valid. Pilih antara 1-6." ;;
         esac
 
         echo ""
         printf "🔙 Tekan [Enter] untuk kembali ke menu..."
-        read dummy
+        read -r
     done
 }
 
-# Eksekusi
+# ┌────────────────────────────────────────────┐
+# │              Eksekusi Utama                │
+# └────────────────────────────────────────────┘
 check_dependencies
 main_menu
