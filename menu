@@ -61,19 +61,13 @@ run_speedtest() {
     if ! command -v speedtest >/dev/null 2>&1; then
         echo "📦 Menginstall Ookla Speedtest CLI..."
         cd /tmp || return
-        wget -O speedtest.tgz https://github.com/BootLoopLover/ookla/raw/main/ookla-speedtest-1.2.0-linux-aarch64.tgz
+        wget --no-check-certificate -O speedtest.tgz https://install.speedtest.net/app/cli/ookla-speedtest-1.1.1-linux-aarch64.tgz
         if [ $? -eq 0 ]; then
-            tar -xzf speedtest.tgz -C /tmp || {
-                echo "❌ Gagal mengekstrak speedtest.tgz."
+            tar -xzvf speedtest.tgz -C /usr/bin/ || {
+                echo "❌ Gagal mengekstrak speedtest.tgz ke /usr/bin."
                 return
             }
-            if [ -f /tmp/speedtest ]; then
-                mv /tmp/speedtest /usr/bin/speedtest
-                chmod +x /usr/bin/speedtest
-            else
-                echo "❌ Error: Binary speedtest tidak ditemukan setelah diekstrak."
-                return
-            fi
+            chmod +x /usr/bin/speedtest
         else
             echo "❌ Gagal mengunduh speedtest. Periksa koneksi internet."
             return
