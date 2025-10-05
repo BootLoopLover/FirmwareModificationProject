@@ -33,21 +33,3 @@ Remove
 rm -f /usr/bin/menu
 ```
 
-
----
-
-
-#Pakawrt Firmware List Installer
-
-![Image](https://github.com/user-attachments/assets/53c2b6a6-c743-4f62-8024-8a8ccacb501f)
-
-Update paka firmware
-```
-wget -O /usr/bin/paka https://raw.githubusercontent.com/BootLoopLover/FirmwareModificationProject/main/paka && chmod +x /usr/bin/paka && /usr/bin/paka
-```
-
-Remove
-```
-rm -f /usr/bin/paka
-```
----
